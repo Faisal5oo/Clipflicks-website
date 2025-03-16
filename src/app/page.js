@@ -2,8 +2,8 @@
 import { motion, useInView } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import LayoutWrapper from "../components/Layout/LayoutWrapper";
-import VideoSlider from "@/components/Slider/VideoSlider";
-import ReactPlayer from "react-player";
+// import VideoSlider from "@/components/Slider/VideoSlider";
+// import ReactPlayer from "react-player";
 import WhyChooseUs from "@/components/Features/FeaturesComponent";
 import VisualShowcase from "@/components/Features/VisualShowCase";
 import TextTransition, { presets } from "react-text-transition";
@@ -19,11 +19,11 @@ export default function Home() {
     );
     return () => clearInterval(intervalId);
   }, []);
-  // Refs for each section
+
   const step1Ref = useRef(null);
   const step2Ref = useRef(null);
 
-  // Check if sections are in view
+ 
   const step1InView = useInView(step1Ref, {
     triggerOnce: true,
     threshold: 0.2,
