@@ -53,11 +53,11 @@ export default function Navbar() {
       >
         <ul className="flex flex-col items-center space-y-4 py-4">
           {[
-            { name: "Submit a Video", path: "/submit" },
-            { name: "Video Library", path: "/library" },
-            { name: "Contact Us", path: "/contact" },
-            { name: "About Us", path: "/about" },
-            { name: "FAQs", path: "/faqs" },
+           { name: "Submit a Video", path: "/submit-video" },
+           { name: "Video Library", path: "/video-library" },
+           { name: "Contact Us", path: "/contact" },
+           { name: "About Us", path: "/about" },
+           { name: "FAQs", path: "/faqs" },
           ].map((item) => (
             <li key={item.name}>
               <Link

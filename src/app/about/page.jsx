@@ -21,7 +21,7 @@ export default function AboutUs() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1 }}
-            className="z-10"
+            className="z-10 px-6"
           >
             <h1 className="text-5xl font-extrabold tracking-wide text-purple-500"><span className="text-white">About</span> Us</h1>
             <p className="mt-4 text-sm text-gray-300 max-w-2xl mx-auto">
