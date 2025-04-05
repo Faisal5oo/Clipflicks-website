@@ -23,7 +23,6 @@ export default function Home() {
   const step1Ref = useRef(null);
   const step2Ref = useRef(null);
 
- 
   const step1InView = useInView(step1Ref, {
     triggerOnce: true,
     threshold: 0.2,
@@ -136,13 +135,11 @@ export default function Home() {
 
             {/* Water Puddle Shape */}
             <div className="flex justify-center md:justify-end">
-              <div
-                className="w-[250px] h-[150px] md:w-[350px] md:h-[200px] 
-                 bg-[#7c349c] rounded-[50%_40%_60%_50%/_50%_60%_40%_50%] 
-                 shadow-lg flex justify-center items-center text-center 
-                 text-white font-bold text-[16px] md:text-[18px] 
-                 backdrop-blur-md p-5"
-              ></div>
+              <img
+                src="/funny-dog.jpg"
+                alt="Sell Your Videos"
+                className="w-[600px] h-[400px] rounded-lg shadow-lg"
+              />
             </div>
           </motion.div>
         </div>

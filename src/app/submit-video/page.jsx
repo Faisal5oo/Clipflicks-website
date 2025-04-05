@@ -21,6 +21,7 @@ export default function VideoSubmissionForm() {
   const [notUploadedElsewhere, setNotUploadedElsewhere] = useState(false);
   const [agreed18, setAgreed18] = useState(false);
   const [agreedTerms, setAgreedTerms] = useState(false);
+  const [signature, setSignature] = useState("");
   const [exclusiveRights, setExclusiveRights] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -141,6 +142,8 @@ export default function VideoSubmissionForm() {
       setLoading(false);
     }
   };
+
+console.log("signature", signature);
 
   return (
     <LayoutWrapper>
@@ -319,10 +322,15 @@ export default function VideoSubmissionForm() {
                 <SignatureCanvas
                   ref={signatureRef}
                   penColor="black"
+                  value={signature}
+                  onEnd={() => setSignature(signatureRef.current.toDataURL())}
                   canvasProps={{ className: "w-full h-32 rounded-lg" }}
                 />
               </div>
             </div>
+            <img src={signature} className="border bg-white" />
+            <button className="bg-white text-black px-4 py-2 rounded-md" onClick={() => setSignature("")}>Clear</button>
+
 
             {/* Submit Button */}
             <motion.button

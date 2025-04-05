@@ -10,6 +10,7 @@ import { useParams } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
 
 export default function VideoSubmissionForm() {
+  const [title, setTitle] = useState("");
   const [videoURL, setVideoURL] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -27,26 +28,208 @@ export default function VideoSubmissionForm() {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploading, setUploading] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(null);
-  const signatureRef = useRef(null);
+  const [sign, setSign] = useState();
+  const [url, setUrl] = useState();
   const { id } = useParams();
 
-  console.log("emplyee id", id);
-
-  useEffect(() => {
-    console.log(signatureRef.current);
-  }, []);
   const countries = [
-    { name: "Pakistan" },
-    { name: "India" },
-    { name: "USA" },
-    { name: "UK" },
-    { name: "UAE" },
+    { name: "Afghanistan" },
+    { name: "Albania" },
+    { name: "Algeria" },
+    { name: "Andorra" },
+    { name: "Angola" },
+    { name: "Antigua and Barbuda" },
+    { name: "Argentina" },
+    { name: "Armenia" },
     { name: "Australia" },
+    { name: "Austria" },
+    { name: "Azerbaijan" },
+    { name: "Bahamas" },
+    { name: "Bahrain" },
+    { name: "Bangladesh" },
+    { name: "Barbados" },
+    { name: "Belarus" },
+    { name: "Belgium" },
+    { name: "Belize" },
+    { name: "Benin" },
+    { name: "Bhutan" },
+    { name: "Bolivia" },
+    { name: "Bosnia and Herzegovina" },
+    { name: "Botswana" },
+    { name: "Brazil" },
+    { name: "Brunei" },
+    { name: "Bulgaria" },
+    { name: "Burkina Faso" },
+    { name: "Burundi" },
+    { name: "Cabo Verde" },
+    { name: "Cambodia" },
+    { name: "Cameroon" },
     { name: "Canada" },
+    { name: "Central African Republic" },
+    { name: "Chad" },
+    { name: "Chile" },
     { name: "China" },
+    { name: "Colombia" },
+    { name: "Comoros" },
+    { name: "Congo (Congo-Brazzaville)" },
+    { name: "Congo (Congo-Kinshasa)" },
+    { name: "Costa Rica" },
+    { name: "Croatia" },
+    { name: "Cuba" },
+    { name: "Cyprus" },
+    { name: "Czechia" },
+    { name: "Denmark" },
+    { name: "Djibouti" },
+    { name: "Dominica" },
+    { name: "Dominican Republic" },
+    { name: "Ecuador" },
+    { name: "Egypt" },
+    { name: "El Salvador" },
+    { name: "Equatorial Guinea" },
+    { name: "Eritrea" },
+    { name: "Estonia" },
+    { name: "Eswatini" },
+    { name: "Ethiopia" },
+    { name: "Fiji" },
+    { name: "Finland" },
+    { name: "France" },
+    { name: "Gabon" },
+    { name: "Gambia" },
+    { name: "Georgia" },
+    { name: "Germany" },
+    { name: "Ghana" },
+    { name: "Greece" },
+    { name: "Grenada" },
+    { name: "Guatemala" },
+    { name: "Guinea" },
+    { name: "Guinea-Bissau" },
+    { name: "Guyana" },
+    { name: "Haiti" },
+    { name: "Honduras" },
+    { name: "Hungary" },
+    { name: "Iceland" },
+    { name: "India" },
+    { name: "Indonesia" },
+    { name: "Iran" },
+    { name: "Iraq" },
+    { name: "Ireland" },
+    { name: "Israel" },
+    { name: "Italy" },
+    { name: "Jamaica" },
     { name: "Japan" },
+    { name: "Jordan" },
+    { name: "Kazakhstan" },
+    { name: "Kenya" },
+    { name: "Kiribati" },
+    { name: "Kuwait" },
+    { name: "Kyrgyzstan" },
+    { name: "Laos" },
+    { name: "Latvia" },
+    { name: "Lebanon" },
+    { name: "Lesotho" },
+    { name: "Liberia" },
+    { name: "Libya" },
+    { name: "Liechtenstein" },
+    { name: "Lithuania" },
+    { name: "Luxembourg" },
+    { name: "Madagascar" },
+    { name: "Malawi" },
+    { name: "Malaysia" },
+    { name: "Maldives" },
+    { name: "Mali" },
+    { name: "Malta" },
+    { name: "Mauritania" },
+    { name: "Mauritius" },
+    { name: "Mexico" },
+    { name: "Moldova" },
+    { name: "Monaco" },
+    { name: "Mongolia" },
+    { name: "Montenegro" },
+    { name: "Morocco" },
+    { name: "Mozambique" },
+    { name: "Myanmar (Burma)" },
+    { name: "Namibia" },
+    { name: "Nauru" },
+    { name: "Nepal" },
+    { name: "Netherlands" },
+    { name: "New Zealand" },
+    { name: "Nicaragua" },
+    { name: "Niger" },
+    { name: "Nigeria" },
+    { name: "North Korea" },
+    { name: "North Macedonia" },
+    { name: "Norway" },
+    { name: "Oman" },
+    { name: "Pakistan" },
+    { name: "Palau" },
+    { name: "Palestine" },
+    { name: "Panama" },
+    { name: "Papua New Guinea" },
+    { name: "Paraguay" },
+    { name: "Peru" },
+    { name: "Philippines" },
+    { name: "Poland" },
+    { name: "Portugal" },
+    { name: "Qatar" },
+    { name: "Romania" },
     { name: "Russia" },
+    { name: "Rwanda" },
+    { name: "Saint Kitts & Nevis" },
+    { name: "Saint Lucia" },
+    { name: "Saint Vincent & Grenadines" },
+    { name: "Samoa" },
+    { name: "San Marino" },
+    { name: "Sao Tome & Principe" },
+    { name: "Saudi Arabia" },
+    { name: "Senegal" },
+    { name: "Serbia" },
+    { name: "Seychelles" },
+    { name: "Sierra Leone" },
+    { name: "Singapore" },
+    { name: "Slovakia" },
+    { name: "Slovenia" },
+    { name: "Solomon Islands" },
+    { name: "Somalia" },
+    { name: "South Africa" },
+    { name: "South Korea" },
+    { name: "South Sudan" },
+    { name: "Spain" },
+    { name: "Sri Lanka" },
+    { name: "Sudan" },
+    { name: "Suriname" },
+    { name: "Sweden" },
+    { name: "Switzerland" },
+    { name: "Syria" },
+    { name: "Tajikistan" },
+    { name: "Tanzania" },
+    { name: "Thailand" },
+    { name: "Timor-Leste" },
+    { name: "Togo" },
+    { name: "Tonga" },
+    { name: "Trinidad & Tobago" },
+    { name: "Tunisia" },
+    { name: "Turkey" },
+    { name: "Turkmenistan" },
+    { name: "Tuvalu" },
+    { name: "Uganda" },
+    { name: "Ukraine" },
+    { name: "United Arab Emirates" },
+    { name: "United Kingdom" },
+    { name: "United States" },
+    { name: "Uruguay" },
+    { name: "Uzbekistan" },
+    { name: "Vanuatu" },
+    { name: "Vatican City" },
+    { name: "Venezuela" },
+    { name: "Vietnam" },
+    { name: "Yemen" },
+    { name: "Zambia" },
+    { name: "Zimbabwe" }
   ];
+  
+  const handleClear = () => {
+    sign.clear();
+  };
 
   const supabaseUrl = "https://xqgoqxnboybqjaqjeliq.supabase.co";
   const supabaseAnonKey =
@@ -65,8 +248,7 @@ export default function VideoSubmissionForm() {
     }
 
     setUploading(true);
-    setUploadProgress(0); // Reset progress to 0
-
+    setUploadProgress(0);
     console.log("Uploading video...");
 
     const fileName = uuidv4() + ".mp4";
@@ -97,6 +279,7 @@ export default function VideoSubmissionForm() {
     setUploadProgress(100);
     setUploadSuccess(true);
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -114,6 +297,7 @@ export default function VideoSubmissionForm() {
 
     const formData = {
       empRef: id,
+      title,
       videoURL,
       firstName,
       lastName,
@@ -126,7 +310,7 @@ export default function VideoSubmissionForm() {
       agreed18,
       agreedTerms,
       exclusiveRights,
-      signature: signatureRef.current.toDataURL(),
+      signature: sign.getTrimmedCanvas().toDataURL("image/png"),
     };
 
     console.log("form data", formData);
@@ -140,11 +324,13 @@ export default function VideoSubmissionForm() {
         body: JSON.stringify(formData),
       });
 
-      if (!response.ok) {
+      if (response.status !== 200) {
         throw new Error("Failed to submit video");
       }
+      
 
       alert("Video submitted successfully!");
+      setTitle("");
       setVideoURL("");
       setFirstName("");
       setLastName("");
@@ -158,7 +344,7 @@ export default function VideoSubmissionForm() {
       setAgreed18(false);
       setAgreedTerms(false);
       setExclusiveRights(false);
-      signatureRef.current.clear();
+      signatureRef.handleClear();
     } catch (error) {
       alert("Failed to submit the form. Please try again.");
     } finally {
@@ -189,6 +375,19 @@ export default function VideoSubmissionForm() {
         >
           <form className="space-y-6" onSubmit={handleSubmit}>
             {/* Video URL */}
+            <div>
+              <label className="text-gray-300 font-medium">Video Title *</label>
+              <div className="relative mt-2">
+                <input
+                  type="text"
+                  required
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  placeholder="Paste your video link"
+                  className="w-full p-3 bg-gray-900 text-white rounded-xl outline-none border border-gray-700 focus:ring-2 focus:ring-purple-500"
+                />
+              </div>
+            </div>
             <div>
               <label className="text-gray-300 font-medium">Video URL *</label>
               <div className="relative mt-2">
@@ -251,7 +450,7 @@ export default function VideoSubmissionForm() {
                 >
                   <option value="">Select a country</option>
                   {countries.map((c, index) => (
-                    <option key={index} value={c}>
+                    <option key={index} value={c.name}>
                       {c.name}
                     </option>
                   ))}
@@ -259,6 +458,7 @@ export default function VideoSubmissionForm() {
               </div>
             </div>
             {/* Video Upload */}
+
             <div
               className="flex flex-col items-center justify-center border-2 border-dashed border-gray-700 rounded-xl p-6 cursor-pointer hover:border-purple-500"
               onClick={() => document.getElementById("videoUpload").click()}
@@ -297,7 +497,6 @@ export default function VideoSubmissionForm() {
               </div>
             )}
 
-          
             {videoFiles.length > 0 && (
               <ul className="text-gray-300 mt-3">
                 {videoFiles.map((file, index) => (
@@ -307,7 +506,7 @@ export default function VideoSubmissionForm() {
                 ))}
               </ul>
             )}
-            );
+
             {/* Email */}
             <div>
               <label className="text-gray-300 font-medium">Email *</label>
@@ -362,12 +561,24 @@ export default function VideoSubmissionForm() {
               <label className="text-gray-300 font-medium">Signature *</label>
               <div className="mt-2 bg-white rounded-lg p-3">
                 <SignatureCanvas
-                  ref={signatureRef}
+                  ref={(data) => setSign(data)}
                   penColor="black"
-                  canvasProps={{ className: "w-full h-32 rounded-lg" }}
+                  canvasProps={{
+                    width: 500,
+                    height: 250,
+                    className: "rounded-lg sigCanvas",
+                  }}
                 />
               </div>
+              <button
+                type="button" // ✅ Prevents form submission
+                className="p-4 bg-black text-white rounded-full mt-2"
+                onClick={handleClear}
+              >
+                Cancel
+              </button>
             </div>
+
             {/* Submit Button */}
             <motion.button
               type="submit"
