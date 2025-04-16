@@ -29,6 +29,7 @@ export default function VideoSubmissionForm() {
   const [uploading, setUploading] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(null);
   const [sign, setSign] = useState();
+
   const [url, setUrl] = useState();
   const { id } = useParams();
 
@@ -224,9 +225,9 @@ export default function VideoSubmissionForm() {
     { name: "Vietnam" },
     { name: "Yemen" },
     { name: "Zambia" },
-    { name: "Zimbabwe" }
+    { name: "Zimbabwe" },
   ];
-  
+
   const handleClear = () => {
     sign.clear();
   };
@@ -287,13 +288,17 @@ export default function VideoSubmissionForm() {
       alert("Please agree to all required checkboxes.");
       return;
     }
-
-    // if (!videoFiles.length) {
-    //   alert("Please upload at least one video.");
-    //   return;
-    // }
-
     setLoading(true);
+
+    let signatureData = null;
+
+    try {
+      if (sign && typeof sign.getTrimmedCanvas === "function") {
+        signatureData = sign.getTrimmedCanvas().toDataURL("image/png");
+      }
+    } catch (err) {
+      console.warn("Could not extract signature:", err);
+    }
 
     const formData = {
       empRef: id,
@@ -310,24 +315,27 @@ export default function VideoSubmissionForm() {
       agreed18,
       agreedTerms,
       exclusiveRights,
-      signature: sign.getTrimmedCanvas().toDataURL("image/png"),
+      signature: signatureData,
     };
 
     console.log("form data", formData);
 
     try {
-      const response = await fetch("http://localhost:5000/api/submit-video", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      console.log("api is hitting");
+      const response = await fetch(
+        "https://clipflicks-admin-fe.vercel.app/api/submissions",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
 
       if (response.status !== 200) {
         throw new Error("Failed to submit video");
       }
-      
 
       alert("Video submitted successfully!");
       setTitle("");
@@ -344,9 +352,14 @@ export default function VideoSubmissionForm() {
       setAgreed18(false);
       setAgreedTerms(false);
       setExclusiveRights(false);
-      signatureRef.handleClear();
+      if (sign) {
+        sign.clear();
+      }
+      setUploadSuccess(null);
     } catch (error) {
-      alert("Failed to submit the form. Please try again.");
+      if (error) {
+        alert("Failed to submit the form. Please try again.");
+      }
     } finally {
       setLoading(false);
     }
@@ -401,64 +414,6 @@ export default function VideoSubmissionForm() {
                 />
               </div>
             </div>
-            {/* Name Fields */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="text-gray-300 font-medium">
-                  First Name *
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
-                  placeholder="John"
-                  className="w-full mt-2 p-3 bg-gray-900 text-white rounded-xl border border-gray-700 outline-none focus:ring-2 focus:ring-purple-500"
-                />
-              </div>
-              <div>
-                <label className="text-gray-300 font-medium">Last Name *</label>
-                <input
-                  type="text"
-                  required
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
-                  placeholder="Doe"
-                  className="w-full mt-2 p-3 bg-gray-900 text-white rounded-xl border border-gray-700 outline-none focus:ring-2 focus:ring-purple-500"
-                />
-              </div>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="text-gray-300 font-medium">
-                  Social Handle
-                </label>
-                <input
-                  type="text"
-                  value={socialHandle}
-                  onChange={(e) => setSocialHandle(e.target.value)}
-                  className="w-full mt-2 p-3 bg-gray-900 text-white rounded-xl border border-gray-700 outline-none focus:ring-2 focus:ring-purple-500"
-                />
-              </div>
-              <div>
-                <label className="text-gray-300 font-medium">Country *</label>
-                <select
-                  value={country}
-                  onChange={(e) => setCountry(e.target.value)}
-                  required
-                  className="w-full mt-2 p-3 bg-gray-900 text-white rounded-xl border border-gray-700 outline-none focus:ring-2 focus:ring-purple-500"
-                >
-                  <option value="">Select a country</option>
-                  {countries.map((c, index) => (
-                    <option key={index} value={c.name}>
-                      {c.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-            {/* Video Upload */}
-
             <div
               className="flex flex-col items-center justify-center border-2 border-dashed border-gray-700 rounded-xl p-6 cursor-pointer hover:border-purple-500"
               onClick={() => document.getElementById("videoUpload").click()}
@@ -507,6 +462,66 @@ export default function VideoSubmissionForm() {
               </ul>
             )}
 
+            {/* Name Fields */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="text-gray-300 font-medium">
+                  First Name *
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  placeholder="Enter Your First Name"
+                  className="w-full mt-2 p-3 bg-gray-900 text-white rounded-xl border border-gray-700 outline-none focus:ring-2 focus:ring-purple-500"
+                />
+              </div>
+              <div>
+                <label className="text-gray-300 font-medium">Last Name *</label>
+                <input
+                  type="text"
+                  required
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                  placeholder="Enter Your Last Name"
+                  className="w-full mt-2 p-3 bg-gray-900 text-white rounded-xl border border-gray-700 outline-none focus:ring-2 focus:ring-purple-500"
+                />
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="text-gray-300 font-medium">
+                  Social Handle
+                </label>
+                <input
+                  type="text"
+                  value={socialHandle}
+                  placeholder="Enter Your Social Handle"
+                  onChange={(e) => setSocialHandle(e.target.value)}
+                  className="w-full mt-2 p-3 bg-gray-900 text-white rounded-xl border border-gray-700 outline-none focus:ring-2 focus:ring-purple-500"
+                />
+              </div>
+              <div>
+                <label className="text-gray-300 font-medium">Country *</label>
+                <select
+                  value={country}
+                  onChange={(e) => setCountry(e.target.value)}
+                  required
+                  placeholder="Select Your Country"
+                  className="w-full mt-2 p-3 bg-gray-900 text-white rounded-xl border border-gray-700 outline-none focus:ring-2 focus:ring-purple-500"
+                >
+                  <option value="">Select a country</option>
+                  {countries.map((c, index) => (
+                    <option key={index} value={c.name}>
+                      {c.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            {/* Video Upload */}
+
             {/* Email */}
             <div>
               <label className="text-gray-300 font-medium">Email *</label>
@@ -515,7 +530,7 @@ export default function VideoSubmissionForm() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="example@email.com"
+                placeholder="Enter your email"
                 className="w-full mt-2 p-3 bg-gray-900 text-white rounded-xl border border-gray-700 outline-none focus:ring-2 focus:ring-purple-500"
               />
             </div>
@@ -571,11 +586,11 @@ export default function VideoSubmissionForm() {
                 />
               </div>
               <button
-                type="button" // ✅ Prevents form submission
+                type="button"
                 className="p-4 bg-black text-white rounded-full mt-2"
                 onClick={handleClear}
               >
-                Cancel
+                Clear
               </button>
             </div>
 

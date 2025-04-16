@@ -134,9 +134,11 @@ export default function Home() {
             <div className="hidden md:block"></div>
 
             {/* Water Puddle Shape */}
+            
             <div className="flex justify-center md:justify-end">
+              
               <img
-                src="/funny-dog.jpg"
+                src="/section-2.jpg"
                 alt="Sell Your Videos"
                 className="w-[600px] h-[400px] rounded-lg shadow-lg"
               />
