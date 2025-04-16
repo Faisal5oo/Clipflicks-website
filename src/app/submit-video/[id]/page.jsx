@@ -29,7 +29,7 @@ export default function VideoSubmissionForm() {
   const [uploading, setUploading] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(null);
   const [sign, setSign] = useState();
-
+  
   const [url, setUrl] = useState();
   const { id } = useParams();
 
@@ -225,9 +225,9 @@ export default function VideoSubmissionForm() {
     { name: "Vietnam" },
     { name: "Yemen" },
     { name: "Zambia" },
-    { name: "Zimbabwe" },
+    { name: "Zimbabwe" }
   ];
-
+  
   const handleClear = () => {
     sign.clear();
   };
@@ -290,16 +290,6 @@ export default function VideoSubmissionForm() {
     }
     setLoading(true);
 
-    let signatureData = null;
-
-    try {
-      if (sign && typeof sign.getTrimmedCanvas === "function") {
-        signatureData = sign.getTrimmedCanvas().toDataURL("image/png");
-      }
-    } catch (err) {
-      console.warn("Could not extract signature:", err);
-    }
-
     const formData = {
       empRef: id,
       title,
@@ -315,27 +305,24 @@ export default function VideoSubmissionForm() {
       agreed18,
       agreedTerms,
       exclusiveRights,
-      signature: signatureData,
+      signature: sign?.getTrimmedCanvas().toDataURL("image/png"),
     };
 
     console.log("form data", formData);
 
     try {
-      console.log("api is hitting");
-      const response = await fetch(
-        "https://clipflicks-admin-fe.vercel.app/api/submissions",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        }
-      );
+      const response = await fetch("https://clipflicks-admin-fe.vercel.app/api/submissions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
 
       if (response.status !== 200) {
         throw new Error("Failed to submit video");
       }
+      
 
       alert("Video submitted successfully!");
       setTitle("");
@@ -353,11 +340,11 @@ export default function VideoSubmissionForm() {
       setAgreedTerms(false);
       setExclusiveRights(false);
       if (sign) {
-        sign.clear();
+        sign.clear();  
       }
       setUploadSuccess(null);
     } catch (error) {
-      if (error) {
+      if(error){
         alert("Failed to submit the form. Please try again.");
       }
     } finally {
@@ -522,6 +509,7 @@ export default function VideoSubmissionForm() {
             </div>
             {/* Video Upload */}
 
+          
             {/* Email */}
             <div>
               <label className="text-gray-300 font-medium">Email *</label>
