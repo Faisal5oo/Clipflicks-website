@@ -298,7 +298,7 @@ export default function VideoSubmissionForm() {
       console.log("Submitting video...");
       console.log("sign test:", sign);
       console.log("sign test 2:", sign.getTrimmedCanvas().toDataURL("image/png"));
-      console.log("sign test 3:", sign?.getCanvas;
+      console.log("sign test 3:", sign?.getCanvas);
 
       let signatureImage = "";
       if (sign && sign.getCanvas) {
