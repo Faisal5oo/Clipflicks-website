@@ -31,10 +31,10 @@ export default function VideoSubmissionForm() {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploading, setUploading] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(null);
-  const [sign, setSign] = useState();
+  const [sign, setSign] = useState(null);
   const { id } = useParams();
-  const signRef = useRef(null);
-  console.log("Sign ref:", signRef);
+  // const signRef = useRef(null);
+  // console.log("Sign ref:", signRef);
   const countries = [
     { name: "Afghanistan" },
     { name: "Albania" },
@@ -230,10 +230,10 @@ export default function VideoSubmissionForm() {
     { name: "Zimbabwe" },
   ];
 
-  const handleClear = () => {
-    // sign.clear();
-    console.log("sign clear");
-  };
+  // const handleClear = () => {
+  //   // sign.clear();
+  //   console.log("sign clear");
+  // };
 
 
   const supabaseUrl = "https://xqgoqxnboybqjaqjeliq.supabase.co";
@@ -288,31 +288,17 @@ export default function VideoSubmissionForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("Submit triggered");
-
     if (!agreed18 || !agreedTerms || !exclusiveRights) {
       alert("Please agree to all required checkboxes.");
       return;
     }
 
-    console.log("All required checkboxes are agreed");
-
     setLoading(true);
-
     try {
-      console.log("Signature ref:", signRef);
-
-      const trimmedCanvas = signRef.current?.getTrimmedCanvas();
-      if (trimmedCanvas) {
-        const base64Image = trimmedCanvas.toDataURL("image/png");
-        return base64Image
+      let signatureImage = "";
+      if (sign && sign.getTrimmedCanvas) {
+        signatureImage = await sign.getTrimmedCanvas().toDataURL("image/png");
       }
-      console.log("base64Image:", base64Image);
-
-      // const trimmedCanvas = signRef.current?.getTrimmedCanvas();
-      // console.log("Trimmed canvas:", trimmedCanvas);
-      // const signatureImage = trimmedCanvas?.toDataURL("image/png");
-      // console.log("Signature Image:", signatureImage);
 
       const formData = {
         empRef: id,
@@ -324,15 +310,13 @@ export default function VideoSubmissionForm() {
         country,
         email,
         recordedVideo,
-        rawVideo: rawVideo,
+        rawVideo,
         notUploadedElsewhere,
         agreed18,
         agreedTerms,
         exclusiveRights,
         signature: signatureImage,
       };
-
-      console.log("Form Data ready to be sent:", formData);
 
       const response = await fetch(
         "https://clipflicks-admin-fe.vercel.app/api/submissions",
@@ -345,15 +329,11 @@ export default function VideoSubmissionForm() {
         }
       );
 
-      console.log("Server response:", response);
-
-      if (response.status !== 200) {
-        throw new Error("Failed to submit video");
-      }
+      if (response.status !== 200) throw new Error("Failed to submit video");
 
       alert("Video submitted successfully!");
 
-      // Clear fields
+      // Reset
       setTitle("");
       setVideoURL("");
       setFirstName("");
@@ -361,28 +341,30 @@ export default function VideoSubmissionForm() {
       setSocialHandle("");
       setCountry("");
       setEmail("");
-      setVideoFiles([]);
-      setVideoURL("");
       setRecordedVideo(false);
       setNotUploadedElsewhere(false);
       setAgreed18(false);
       setAgreedTerms(false);
       setExclusiveRights(false);
-
-      if (signRef && typeof signRef.clear === "function") {
-        signRef.clear();
-        console.log("Signature cleared");
-      }
-
       setUploadSuccess(null);
-    } catch (error) {
-      console.error("Submission error:", error);
-      alert("Failed to submit the form. Please try again.");
+      setRawVideo("");
+
+      if (sign && sign.clear) {
+        sign.clear();
+      }
+    } catch (err) {
+      console.error("Submission error:", err);
+      alert("Submission failed. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
+  const handleClear = () => {
+    if (sign) {
+      sign.clear();
+    }
+  };
   return (
     <LayoutWrapper>
       {/* Background with subtle gradient */}
@@ -594,9 +576,13 @@ export default function VideoSubmissionForm() {
               <label className="text-gray-300 font-medium">Signature *</label>
               <div className="mt-2 bg-white rounded-lg p-3">
                 <SignatureCanvas
-                  ref={signRef}
+                  ref={(ref) => setSign(ref)}
                   penColor="black"
-                
+                  canvasProps={{
+                    width: 500,
+                    height: 250,
+                    className: "rounded-lg sigCanvas",
+                  }}
                 />
               </div>
               <button
