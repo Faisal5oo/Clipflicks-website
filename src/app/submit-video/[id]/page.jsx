@@ -596,11 +596,7 @@ export default function VideoSubmissionForm() {
                 <SignatureCanvas
                   ref={signRef}
                   penColor="black"
-                  canvasProps={{
-                    width: 500,
-                    height: 250,
-                    className: "rounded-lg sigCanvas",
-                  }}
+                
                 />
               </div>
               <button
