@@ -2,7 +2,10 @@
 import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Switch } from "@headlessui/react";
-import SignatureCanvas from "react-signature-canvas";
+import dynamic from "next/dynamic";
+const SignatureCanvas = dynamic(() => import("react-signature-canvas"), {
+  ssr: false, // important for Vercel
+});
 import LayoutWrapper from "../../../components/Layout/LayoutWrapper";
 import { Plus } from "lucide-react";
 import { createClient } from "@supabase/supabase-js";
@@ -29,9 +32,8 @@ export default function VideoSubmissionForm() {
   const [uploading, setUploading] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(null);
   const [sign, setSign] = useState();
-  
-  const [url, setUrl] = useState();
   const { id } = useParams();
+  const signRef = useRef(null);
 
   const countries = [
     { name: "Afghanistan" },
@@ -225,9 +227,9 @@ export default function VideoSubmissionForm() {
     { name: "Vietnam" },
     { name: "Yemen" },
     { name: "Zambia" },
-    { name: "Zimbabwe" }
+    { name: "Zimbabwe" },
   ];
-  
+
   const handleClear = () => {
     sign.clear();
   };
@@ -284,47 +286,72 @@ export default function VideoSubmissionForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    console.log("Submit triggered");
+
     if (!agreed18 || !agreedTerms || !exclusiveRights) {
       alert("Please agree to all required checkboxes.");
       return;
     }
+
+    console.log("All required checkboxes are agreed");
+
     setLoading(true);
 
-    const formData = {
-      empRef: id,
-      title,
-      videoURL,
-      firstName,
-      lastName,
-      socialHandle,
-      country,
-      email,
-      recordedVideo,
-      rawVideo: rawVideo,
-      notUploadedElsewhere,
-      agreed18,
-      agreedTerms,
-      exclusiveRights,
-      signature: sign?.getTrimmedCanvas().toDataURL("image/png"),
-    };
-
-    console.log("form data", formData);
-
     try {
-      const response = await fetch("https://clipflicks-admin-fe.vercel.app/api/submissions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      console.log("Signature ref:", signRef);
+
+      if (!signRef.current || typeof signRef.current.getTrimmedCanvas !== 'function') {
+        console.error("Signature Canvas is not ready or getTrimmedCanvas is not a function");
+        alert("Signature is not available. Please try again.");
+        setLoading(false);
+        return;
+      }
+
+      const trimmedCanvas = signRef.current?.getTrimmedCanvas();
+      console.log("Trimmed canvas:", trimmedCanvas);
+      const signatureImage = trimmedCanvas?.toDataURL("image/png");
+      console.log("Signature Image:", signatureImage);
+
+      const formData = {
+        empRef: id,
+        title,
+        videoURL,
+        firstName,
+        lastName,
+        socialHandle,
+        country,
+        email,
+        recordedVideo,
+        rawVideo: rawVideo,
+        notUploadedElsewhere,
+        agreed18,
+        agreedTerms,
+        exclusiveRights,
+        signature: signatureImage,
+      };
+
+      console.log("Form Data ready to be sent:", formData);
+
+      const response = await fetch(
+        "https://clipflicks-admin-fe.vercel.app/api/submissions",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      console.log("Server response:", response);
 
       if (response.status !== 200) {
         throw new Error("Failed to submit video");
       }
-      
 
       alert("Video submitted successfully!");
+
+      // Clear fields
       setTitle("");
       setVideoURL("");
       setFirstName("");
@@ -339,14 +366,16 @@ export default function VideoSubmissionForm() {
       setAgreed18(false);
       setAgreedTerms(false);
       setExclusiveRights(false);
-      if (sign) {
-        sign.clear();  
+
+      if (sign && typeof sign.clear === "function") {
+        sign.clear();
+        console.log("Signature cleared");
       }
+
       setUploadSuccess(null);
     } catch (error) {
-      if(error){
-        alert("Failed to submit the form. Please try again.");
-      }
+      console.error("Submission error:", error);
+      alert("Failed to submit the form. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -509,7 +538,6 @@ export default function VideoSubmissionForm() {
             </div>
             {/* Video Upload */}
 
-          
             {/* Email */}
             <div>
               <label className="text-gray-300 font-medium">Email *</label>
@@ -564,7 +592,7 @@ export default function VideoSubmissionForm() {
               <label className="text-gray-300 font-medium">Signature *</label>
               <div className="mt-2 bg-white rounded-lg p-3">
                 <SignatureCanvas
-                  ref={(data) => setSign(data)}
+                  ref={signRef}
                   penColor="black"
                   canvasProps={{
                     width: 500,

@@ -315,7 +315,7 @@ export default function VideoSubmissionForm() {
     console.log("form data", formData);
 
     try {
-      const response = await fetch("/api/submissions", {
+      const response = await fetch("http://localhost:3001/api/submissions", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
