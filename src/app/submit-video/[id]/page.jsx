@@ -34,7 +34,7 @@ export default function VideoSubmissionForm() {
   const [sign, setSign] = useState();
   const { id } = useParams();
   const signRef = useRef(null);
-
+  const [isCanvasReady, setIsCanvasReady] = useState(false);
   const countries = [
     { name: "Afghanistan" },
     { name: "Albania" },
@@ -231,8 +231,15 @@ export default function VideoSubmissionForm() {
   ];
 
   const handleClear = () => {
-    sign.clear();
+    // sign.clear();
+    console.log("sign clear");
   };
+
+  useEffect(() => {
+    if (signRef.current && typeof signRef.current.getTrimmedCanvas === "function") {
+      setIsCanvasReady(true);
+    }
+  }, []);
 
   const supabaseUrl = "https://xqgoqxnboybqjaqjeliq.supabase.co";
   const supabaseAnonKey =
@@ -300,17 +307,24 @@ export default function VideoSubmissionForm() {
     try {
       console.log("Signature ref:", signRef);
 
-      if (!signRef.current || typeof signRef.current.getTrimmedCanvas !== 'function') {
-        console.error("Signature Canvas is not ready or getTrimmedCanvas is not a function");
-        alert("Signature is not available. Please try again.");
-        setLoading(false);
+      if (!isCanvasReady) {
+        console.error("Canvas is not ready yet.");
         return;
       }
 
-      const trimmedCanvas = signRef.current?.getTrimmedCanvas();
-      console.log("Trimmed canvas:", trimmedCanvas);
-      const signatureImage = trimmedCanvas?.toDataURL("image/png");
+      const canvas = signRef.current?.getTrimmedCanvas?.();
+      if (!canvas) {
+        console.error("Canvas trimmed version not available.");
+        return;
+      }
+
+      const signatureImage = canvas.toDataURL("image/png");
       console.log("Signature Image:", signatureImage);
+
+      // const trimmedCanvas = signRef.current?.getTrimmedCanvas();
+      // console.log("Trimmed canvas:", trimmedCanvas);
+      // const signatureImage = trimmedCanvas?.toDataURL("image/png");
+      // console.log("Signature Image:", signatureImage);
 
       const formData = {
         empRef: id,
