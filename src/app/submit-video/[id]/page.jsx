@@ -34,7 +34,7 @@ export default function VideoSubmissionForm() {
   const [sign, setSign] = useState();
   const { id } = useParams();
   const signRef = useRef(null);
-  const [isCanvasReady, setIsCanvasReady] = useState(false);
+  console.log("Sign ref:", signRef);
   const countries = [
     { name: "Afghanistan" },
     { name: "Albania" },
@@ -235,11 +235,6 @@ export default function VideoSubmissionForm() {
     console.log("sign clear");
   };
 
-  useEffect(() => {
-    if (signRef.current && typeof signRef.current.getTrimmedCanvas === "function") {
-      setIsCanvasReady(true);
-    }
-  }, []);
 
   const supabaseUrl = "https://xqgoqxnboybqjaqjeliq.supabase.co";
   const supabaseAnonKey =
@@ -306,11 +301,6 @@ export default function VideoSubmissionForm() {
 
     try {
       console.log("Signature ref:", signRef);
-
-      if (!isCanvasReady) {
-        console.error("Canvas is not ready yet.");
-        return;
-      }
 
       const canvas = signRef.current?.getTrimmedCanvas?.();
       if (!canvas) {
@@ -381,8 +371,8 @@ export default function VideoSubmissionForm() {
       setAgreedTerms(false);
       setExclusiveRights(false);
 
-      if (sign && typeof sign.clear === "function") {
-        sign.clear();
+      if (signRef && typeof signRef.clear === "function") {
+        signRef.clear();
         console.log("Signature cleared");
       }
 
