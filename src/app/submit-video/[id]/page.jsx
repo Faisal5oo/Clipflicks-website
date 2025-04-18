@@ -35,6 +35,7 @@ export default function VideoSubmissionForm() {
   const { id } = useParams();
   const signRef = useRef(null);
   console.log("Sign ref:", signRef);
+
   const countries = [
     { name: "Afghanistan" },
     { name: "Albania" },
@@ -230,12 +231,6 @@ export default function VideoSubmissionForm() {
     { name: "Zimbabwe" },
   ];
 
-  const handleClear = () => {
-    // sign.clear();
-    console.log("sign clear");
-  };
-
-
   const supabaseUrl = "https://xqgoqxnboybqjaqjeliq.supabase.co";
   const supabaseAnonKey =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhxZ29xeG5ib3licWphcWplbGlxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA5MTM2MTQsImV4cCI6MjA1NjQ4OTYxNH0.g6zofzjCa1vzTm6Tnh0V8m3mkqqPCE1jbJ5uSlIb_is";
@@ -244,35 +239,27 @@ export default function VideoSubmissionForm() {
 
   const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
+  const handleClear = () => {
+    signRef.current?.clear();
+  };
+
   const handleFileUpload = async (e) => {
     const videoFile = e.target.files[0];
-
-    if (!videoFile) {
-      console.error("No file selected");
-      return;
-    }
+    if (!videoFile) return;
 
     setUploading(true);
     setUploadProgress(0);
-    console.log("Uploading video...");
 
     const fileName = uuidv4() + ".mp4";
-
     const { data, error } = await supabase.storage
       .from("videos")
       .upload(fileName, videoFile, {
         contentType: videoFile.type,
         upsert: true,
-        onUploadProgress: (progressEvent) => {
-          const percentCompleted = Math.round(
-            (progressEvent.loaded * 100) / progressEvent.total
-          );
-          setUploadProgress(percentCompleted);
-        },
       });
 
     if (error) {
-      console.log("Error uploading video:", error);
+      console.error("Upload error:", error);
       setUploading(false);
       setUploadSuccess(false);
       return;
@@ -288,33 +275,20 @@ export default function VideoSubmissionForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("Submit triggered");
-
     if (!agreed18 || !agreedTerms || !exclusiveRights) {
       alert("Please agree to all required checkboxes.");
       return;
     }
 
-    console.log("All required checkboxes are agreed");
-
     setLoading(true);
 
     try {
-      console.log("Signature ref:", signRef);
+      const trimmedCanvas = signRef.current?.getTrimmedCanvas();
+      let signatureImage = "";
 
-      const canvas = signRef.current?.getTrimmedCanvas?.();
-      if (!canvas) {
-        console.error("Canvas trimmed version not available.");
-        return;
+      if (trimmedCanvas) {
+        signatureImage = trimmedCanvas.toDataURL("image/png");
       }
-
-      const signatureImage = canvas.toDataURL("image/png");
-      console.log("Signature Image:", signatureImage);
-
-      // const trimmedCanvas = signRef.current?.getTrimmedCanvas();
-      // console.log("Trimmed canvas:", trimmedCanvas);
-      // const signatureImage = trimmedCanvas?.toDataURL("image/png");
-      // console.log("Signature Image:", signatureImage);
 
       const formData = {
         empRef: id,
@@ -326,15 +300,13 @@ export default function VideoSubmissionForm() {
         country,
         email,
         recordedVideo,
-        rawVideo: rawVideo,
+        rawVideo,
         notUploadedElsewhere,
         agreed18,
         agreedTerms,
         exclusiveRights,
         signature: signatureImage,
       };
-
-      console.log("Form Data ready to be sent:", formData);
 
       const response = await fetch(
         "https://clipflicks-admin-fe.vercel.app/api/submissions",
@@ -347,15 +319,13 @@ export default function VideoSubmissionForm() {
         }
       );
 
-      console.log("Server response:", response);
-
       if (response.status !== 200) {
         throw new Error("Failed to submit video");
       }
 
       alert("Video submitted successfully!");
 
-      // Clear fields
+      // Reset form
       setTitle("");
       setVideoURL("");
       setFirstName("");
@@ -364,19 +334,13 @@ export default function VideoSubmissionForm() {
       setCountry("");
       setEmail("");
       setVideoFiles([]);
-      setVideoURL("");
       setRecordedVideo(false);
       setNotUploadedElsewhere(false);
       setAgreed18(false);
       setAgreedTerms(false);
       setExclusiveRights(false);
-
-      if (signRef && typeof signRef.clear === "function") {
-        signRef.clear();
-        console.log("Signature cleared");
-      }
-
       setUploadSuccess(null);
+      signRef.current?.clear();
     } catch (error) {
       console.error("Submission error:", error);
       alert("Failed to submit the form. Please try again.");
