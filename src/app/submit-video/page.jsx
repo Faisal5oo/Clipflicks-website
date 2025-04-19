@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 const SignatureCanvas = dynamic(() => import("react-signature-canvas"), {
   ssr: false,
 });
-import LayoutWrapper from "../../../components/Layout/LayoutWrapper";
+import LayoutWrapper from "../../components/Layout/LayoutWrapper";
 import { Plus } from "lucide-react";
 import { createClient } from "@supabase/supabase-js";
 import { useParams } from "next/navigation";
