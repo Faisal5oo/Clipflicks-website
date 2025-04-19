@@ -1,10 +1,9 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Switch } from "@headlessui/react";
 import dynamic from "next/dynamic";
 const SignatureCanvas = dynamic(() => import("react-signature-canvas"), {
-  ssr: false, // important for Vercel
+  ssr: false,
 });
 import LayoutWrapper from "../../../components/Layout/LayoutWrapper";
 import { Plus } from "lucide-react";
@@ -31,7 +30,7 @@ export default function VideoSubmissionForm() {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploading, setUploading] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(null);
-  const [sign, setSign] = useState(null);
+  const signRef = useRef(null);
   const { id } = useParams();
   // const signRef = useRef(null);
   // console.log("Sign ref:", signRef);
@@ -235,7 +234,6 @@ export default function VideoSubmissionForm() {
   //   console.log("sign clear");
   // };
 
-
   const supabaseUrl = "https://xqgoqxnboybqjaqjeliq.supabase.co";
   const supabaseAnonKey =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhxZ29xeG5ib3licWphcWplbGlxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA5MTM2MTQsImV4cCI6MjA1NjQ4OTYxNH0.g6zofzjCa1vzTm6Tnh0V8m3mkqqPCE1jbJ5uSlIb_is";
@@ -294,15 +292,13 @@ export default function VideoSubmissionForm() {
     }
 
     setLoading(true);
-    try {
-      console.log("Submitting video...");
-      console.log("sign test:", sign);
-      console.log("sign test 2:", sign.getTrimmedCanvas().toDataURL("image/png"));
-      console.log("sign test 3:", sign?.getCanvas);
 
+    try {
       let signatureImage = "";
-      if (sign && sign.getCanvas) {
-        signatureImage = sign.getCanvas().toDataURL("image/png");
+      if (signRef.current && !signRef.current.isEmpty()) {
+        signatureImage = signRef.current
+          .getTrimmedCanvas()
+          .toDataURL("image/png");
       }
 
       const formData = {
@@ -339,24 +335,7 @@ export default function VideoSubmissionForm() {
       alert("Video submitted successfully!");
 
       // Reset
-      setTitle("");
-      setVideoURL("");
-      setFirstName("");
-      setLastName("");
-      setSocialHandle("");
-      setCountry("");
-      setEmail("");
-      setRecordedVideo(false);
-      setNotUploadedElsewhere(false);
-      setAgreed18(false);
-      setAgreedTerms(false);
-      setExclusiveRights(false);
-      setUploadSuccess(null);
-      setRawVideo("");
-
-      if (sign && sign.clear) {
-        sign.clear();
-      }
+      if (signRef.current) signRef.current.clear();
     } catch (err) {
       console.error("Submission error:", err);
       alert("Submission failed. Please try again.");
@@ -366,10 +345,11 @@ export default function VideoSubmissionForm() {
   };
 
   const handleClear = () => {
-    if (sign) {
-      sign.clear();
+    if (signRef.current) {
+      signRef.current.clear();
     }
   };
+
   return (
     <LayoutWrapper>
       {/* Background with subtle gradient */}
@@ -581,7 +561,7 @@ export default function VideoSubmissionForm() {
               <label className="text-gray-300 font-medium">Signature *</label>
               <div className="mt-2 bg-white rounded-lg p-3">
                 <SignatureCanvas
-                  ref={(ref) => setSign(ref)}
+                  ref={signRef}
                   penColor="black"
                   canvasProps={{
                     width: 500,
