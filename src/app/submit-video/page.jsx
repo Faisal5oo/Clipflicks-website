@@ -1,11 +1,14 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Switch } from "@headlessui/react";
-import SignatureCanvas from "react-signature-canvas";
-import LayoutWrapper from "../../components/Layout/LayoutWrapper";
+import dynamic from "next/dynamic";
+const SignatureCanvas = dynamic(() => import("react-signature-canvas"), {
+  ssr: false,
+});
+import LayoutWrapper from "../../../components/Layout/LayoutWrapper";
 import { Plus } from "lucide-react";
 import { createClient } from "@supabase/supabase-js";
+import { useParams } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
 
 export default function VideoSubmissionForm() {
@@ -27,9 +30,7 @@ export default function VideoSubmissionForm() {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploading, setUploading] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(null);
-  const [sign, setSign] = useState();
-  
-  const [url, setUrl] = useState();
+  const signRef = useRef(null);
 
   const countries = [
     { name: "Afghanistan" },
@@ -223,12 +224,8 @@ export default function VideoSubmissionForm() {
     { name: "Vietnam" },
     { name: "Yemen" },
     { name: "Zambia" },
-    { name: "Zimbabwe" }
+    { name: "Zimbabwe" },
   ];
-  
-  const handleClear = () => {
-    sign.clear();
-  };
 
   const supabaseUrl = "https://xqgoqxnboybqjaqjeliq.supabase.co";
   const supabaseAnonKey =
@@ -287,72 +284,66 @@ export default function VideoSubmissionForm() {
       return;
     }
 
-    // if (!videoFiles.length) {
-    //   alert("Please upload at least one video.");
-    //   return;
-    // }
+    if (signRef.current?.isEmpty()) {
+      alert("Please draw your signature before submitting.");
+      return;
+    }
 
     setLoading(true);
 
-    const formData = {
-      empRef: null,
-      title,
-      videoURL,
-      firstName,
-      lastName,
-      socialHandle,
-      country,
-      email,
-      recordedVideo,
-      rawVideo: rawVideo,
-      notUploadedElsewhere,
-      agreed18,
-      agreedTerms,
-      exclusiveRights,
-      signature: sign.getTrimmedCanvas().toDataURL("image/png"),
-    };
-
-    console.log("form data", formData);
-
     try {
-      const response = await fetch("http://localhost:3001/api/submissions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      let signatureImage = "";
 
-      if (response.status !== 200) {
-        throw new Error("Failed to submit video");
+      if (signRef.current && !signRef.current.isEmpty()) {
+        signatureImage = signRef.current.toDataURL("image/png");
       }
-      
+
+      const formData = {
+        empRef: null,
+        title,
+        videoURL,
+        firstName,
+        lastName,
+        socialHandle,
+        country,
+        email,
+        recordedVideo,
+        rawVideo,
+        notUploadedElsewhere,
+        agreed18,
+        agreedTerms,
+        exclusiveRights,
+        signature: signatureImage,
+      };
+
+      const response = await fetch(
+        "https://clipflicks-admin-fe.vercel.app/api/submissions",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      if (response.status !== 200) throw new Error("Failed to submit video");
 
       alert("Video submitted successfully!");
-      setTitle("");
-      setVideoURL("");
-      setFirstName("");
-      setLastName("");
-      setSocialHandle("");
-      setCountry("");
-      setEmail("");
-      setVideoFiles([]);
-      setVideoURL("");
-      setRecordedVideo(false);
-      setNotUploadedElsewhere(false);
-      setAgreed18(false);
-      setAgreedTerms(false);
-      setExclusiveRights(false);
-      if (sign) {
-        sign.clear();  
-      }
-      setUploadSuccess(null);
-    } catch (error) {
-      if(error){
-        alert("Failed to submit the form. Please try again.");
-      }
+
+      // Clear signature pad after submission
+      if (signRef.current) signRef.current.clear();
+    } catch (err) {
+      console.error("Submission error:", err);
+      alert("Submission failed. Please try again.");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleClear = () => {
+    if (signRef.current) {
+      signRef.current.clear();
     }
   };
 
@@ -511,7 +502,8 @@ export default function VideoSubmissionForm() {
                 </select>
               </div>
             </div>
-          
+            {/* Video Upload */}
+
             {/* Email */}
             <div>
               <label className="text-gray-300 font-medium">Email *</label>
@@ -566,7 +558,7 @@ export default function VideoSubmissionForm() {
               <label className="text-gray-300 font-medium">Signature *</label>
               <div className="mt-2 bg-white rounded-lg p-3">
                 <SignatureCanvas
-                  ref={(data) => setSign(data)}
+                  ref={signRef}
                   penColor="black"
                   canvasProps={{
                     width: 500,
@@ -576,7 +568,7 @@ export default function VideoSubmissionForm() {
                 />
               </div>
               <button
-                type="button" // ✅ Prevents form submission
+                type="button"
                 className="p-4 bg-black text-white rounded-full mt-2"
                 onClick={handleClear}
               >

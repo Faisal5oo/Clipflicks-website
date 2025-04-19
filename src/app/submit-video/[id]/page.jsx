@@ -32,9 +32,7 @@ export default function VideoSubmissionForm() {
   const [uploadSuccess, setUploadSuccess] = useState(null);
   const signRef = useRef(null);
   const { id } = useParams();
-  console.log("Sign ref:", signRef);
-  // const base64Image = signRef.current?.toDataURL();
-
+  
   const countries = [
     { name: "Afghanistan" },
     { name: "Albania" },
@@ -287,7 +285,7 @@ export default function VideoSubmissionForm() {
       return;
     }
 
-    // ✅ Check if signature is drawn
+
     if (signRef.current?.isEmpty()) {
       alert("Please draw your signature before submitting.");
       return;
