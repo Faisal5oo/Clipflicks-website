@@ -33,14 +33,7 @@ export default function VideoSubmissionForm() {
   const signRef = useRef(null);
   const { id } = useParams();
   console.log("Sign ref:", signRef);
-  const base64Image = signRef.current?.toDataURL();
-  console.log("Base64 Image:", base64Image);
-  console.log("Base64 fromData:", signRef.current?.fromData());
-  console.log("Base64 toData:", signRef.current?.toData());
-  console.log("Base64 getCanvas:", signRef.current?.getCanvas());
-  
-
-  
+  // const base64Image = signRef.current?.toDataURL();
 
   const countries = [
     { name: "Afghanistan" },
@@ -294,14 +287,19 @@ export default function VideoSubmissionForm() {
       return;
     }
 
+    // ✅ Check if signature is drawn
+    if (signRef.current?.isEmpty()) {
+      alert("Please draw your signature before submitting.");
+      return;
+    }
+
     setLoading(true);
 
     try {
       let signatureImage = "";
+
       if (signRef.current && !signRef.current.isEmpty()) {
-        signatureImage = signRef.current
-          .getTrimmedCanvas()
-          .toDataURL("image/png");
+        signatureImage = signRef.current.toDataURL("image/png");
       }
 
       const formData = {
@@ -337,7 +335,7 @@ export default function VideoSubmissionForm() {
 
       alert("Video submitted successfully!");
 
-      // Reset
+      // Clear signature pad after submission
       if (signRef.current) signRef.current.clear();
     } catch (err) {
       console.error("Submission error:", err);
