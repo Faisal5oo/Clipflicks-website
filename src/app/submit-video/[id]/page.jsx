@@ -32,8 +32,16 @@ export default function VideoSubmissionForm() {
   const [uploadSuccess, setUploadSuccess] = useState(null);
   const signRef = useRef(null);
   const { id } = useParams();
-  // const signRef = useRef(null);
-  // console.log("Sign ref:", signRef);
+  console.log("Sign ref:", signRef);
+  const base64Image = signRef.current?.toDataURL();
+  console.log("Base64 Image:", base64Image);
+  console.log("Base64 fromData:", signRef.current?.fromData());
+  console.log("Base64 toData:", signRef.current?.toData());
+  console.log("Base64 getCanvas:", signRef.current?.getCanvas());
+  
+
+  
+
   const countries = [
     { name: "Afghanistan" },
     { name: "Albania" },
@@ -228,11 +236,6 @@ export default function VideoSubmissionForm() {
     { name: "Zambia" },
     { name: "Zimbabwe" },
   ];
-
-  // const handleClear = () => {
-  //   // sign.clear();
-  //   console.log("sign clear");
-  // };
 
   const supabaseUrl = "https://xqgoqxnboybqjaqjeliq.supabase.co";
   const supabaseAnonKey =
