@@ -287,8 +287,7 @@ export default function VideoSubmissionForm() {
       
       const res = await fetch("https://clipflicks-admin-fe.vercel.app/api/upload-url");
       const { uploadUrl, publicUrl } = await res.json();
-
-      // Create a new XMLHttpRequest to track upload progress
+  
       return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
         
@@ -329,7 +328,7 @@ export default function VideoSubmissionForm() {
       return null;
     }
   }
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
 
