@@ -7,13 +7,7 @@ import LayoutWrapper from "../../components/Layout/LayoutWrapper";
 
 
 const videos = [
-  { id: 1, title: "Exploring Space", url: "https://www.youtube.com/watch?v=b55fIOZaSh4", category: "Science", description: "A journey through the cosmos exploring the wonders of space." },
-  { id: 2, title: "Deep Ocean Mysteries", url: "https://www.youtube.com/watch?v=b55fIOZaSh4", category: "Nature", description: "Unveiling the hidden secrets of the deep ocean." },
-  { id: 3, title: "AI Revolution", url: "https://www.youtube.com/watch?v=b55fIOZaSh4", category: "Technology", description: "How AI is changing the world and its future implications." },
-  { id: 4, title: "The Future of Quantum Computing", url: "https://www.youtube.com/watch?v=b55fIOZaSh4", category: "Technology", description: "Exploring the potential and challenges of quantum computing." },
-  { id: 5, title: "Wildlife in the Amazon", url: "https://www.youtube.com/watch?v=b55fIOZaSh4", category: "Nature", description: "A look into the rich biodiversity of the Amazon rainforest." },
-  { id: 6, title: "Mars Colonization", url: "https://www.youtube.com/watch?v=b55fIOZaSh4", category: "Science", description: "Challenges and possibilities of settling on Mars." },
-  { id: 7, title: "Future of Robotics", url: "https://www.youtube.com/watch?v=b55fIOZaSh4", category: "Technology", description: "Where robotics is heading in the next decade." },
+ 
 ];
 
 export default function PremiumVideoLibrary() {

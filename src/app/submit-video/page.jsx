@@ -8,7 +8,7 @@ const SignatureCanvas = dynamic(() => import("react-signature-canvas"), {
 import LayoutWrapper from "../../components/Layout/LayoutWrapper";
 import { Plus } from "lucide-react";
 import { createClient } from "@supabase/supabase-js";
-import { useParams } from "next/navigation";
+// import { useParams } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
 
 export default function VideoSubmissionForm() {
@@ -23,6 +23,9 @@ export default function VideoSubmissionForm() {
   const [rawVideo, setRawVideo] = useState("");
   const [recordedVideo, setRecordedVideo] = useState(false);
   const [notUploadedElsewhere, setNotUploadedElsewhere] = useState(false);
+  const [recordedBy, setRecordedBy] = useState(""); // "Me", "Friend", etc.
+  const [submittedElsewhere, setSubmittedElsewhere] = useState(""); // "Yes" or "No"
+  const [otherCompanyName, setOtherCompanyName] = useState("");
   const [agreed18, setAgreed18] = useState(false);
   const [agreedTerms, setAgreedTerms] = useState(false);
   const [exclusiveRights, setExclusiveRights] = useState(false);
@@ -31,7 +34,8 @@ export default function VideoSubmissionForm() {
   const [uploading, setUploading] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(null);
   const signRef = useRef(null);
-
+  // const { id } = useParams();
+  //  bucket name = clipflicks
   const countries = [
     { name: "Afghanistan" },
     { name: "Albania" },
@@ -227,54 +231,104 @@ export default function VideoSubmissionForm() {
     { name: "Zimbabwe" },
   ];
 
-  const supabaseUrl = "https://xqgoqxnboybqjaqjeliq.supabase.co";
-  const supabaseAnonKey =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhxZ29xeG5ib3licWphcWplbGlxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA5MTM2MTQsImV4cCI6MjA1NjQ4OTYxNH0.g6zofzjCa1vzTm6Tnh0V8m3mkqqPCE1jbJ5uSlIb_is";
-  const CDNURL =
-    "https://xqgoqxnboybqjaqjeliq.supabase.co/storage/v1/object/public/videos";
+  // const supabaseUrl = "https://xqgoqxnboybqjaqjeliq.supabase.co";
+  // const supabaseAnonKey =
+  //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhxZ29xeG5ib3licWphcWplbGlxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA5MTM2MTQsImV4cCI6MjA1NjQ4OTYxNH0.g6zofzjCa1vzTm6Tnh0V8m3mkqqPCE1jbJ5uSlIb_is";
+  // const CDNURL =
+  //   "https://xqgoqxnboybqjaqjeliq.supabase.co/storage/v1/object/public/videos";
 
-  const supabase = createClient(supabaseUrl, supabaseAnonKey);
+  // const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-  const handleFileUpload = async (e) => {
-    const videoFile = e.target.files[0];
+  // const handleFileUpload = async (e) => {
+  //   const videoFile = e.target.files[0];
 
-    if (!videoFile) {
-      console.error("No file selected");
-      return;
-    }
+  //   if (!videoFile) {
+  //     console.error("No file selected");
+  //     return;
+  //   }
 
-    setUploading(true);
-    setUploadProgress(0);
-    console.log("Uploading video...");
+  //   setUploading(true);
+  //   setUploadProgress(0);
+  //   console.log("Uploading video...");
 
-    const fileName = uuidv4() + ".mp4";
+  //   const fileName = uuidv4() + ".mp4";
 
-    const { data, error } = await supabase.storage
-      .from("videos")
-      .upload(fileName, videoFile, {
-        contentType: videoFile.type,
-        upsert: true,
-        onUploadProgress: (progressEvent) => {
-          const percentCompleted = Math.round(
-            (progressEvent.loaded * 100) / progressEvent.total
-          );
-          setUploadProgress(percentCompleted);
-        },
+  //   const { data, error } = await supabase.storage
+  //     .from("videos")
+  //     .upload(fileName, videoFile, {
+  //       contentType: videoFile.type,
+  //       upsert: true,
+  //       onUploadProgress: (progressEvent) => {
+  //         const percentCompleted = Math.round(
+  //           (progressEvent.loaded * 100) / progressEvent.total
+  //         );
+  //         setUploadProgress(percentCompleted);
+  //       },
+  //     });
+
+  //   if (error) {
+  //     console.log("Error uploading video:", error);
+  //     setUploading(false);
+  //     setUploadSuccess(false);
+  //     return;
+  //   }
+
+  //   const CDNLink = `${CDNURL}/${data.path}`;
+  //   setRawVideo(CDNLink);
+  //   setUploading(false);
+  //   setUploadProgress(100);
+  //   setUploadSuccess(true);
+  // };
+
+  async function uploadVideo(file) {
+    try {
+      setUploading(true);
+      setUploadProgress(0);
+      
+      const res = await fetch("https://clipflicks-admin-fe.vercel.app/api/upload-url");
+      const { uploadUrl, publicUrl } = await res.json();
+
+      // Create a new XMLHttpRequest to track upload progress
+      return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        
+        xhr.upload.addEventListener("progress", (event) => {
+          if (event.lengthComputable) {
+            const percentCompleted = Math.round((event.loaded * 100) / event.total);
+            setUploadProgress(percentCompleted);
+          }
+        });
+        
+        xhr.addEventListener("load", () => {
+          if (xhr.status >= 200 && xhr.status < 300) {
+            console.log("✅ Upload successful!");
+            console.log("📽️ Video URL:", publicUrl);
+            resolve(publicUrl);
+          } else {
+            console.error("❌ Upload failed");
+            reject(new Error("Upload failed"));
+          }
+        });
+        
+        xhr.addEventListener("error", () => {
+          console.error("❌ Upload failed");
+          reject(new Error("Upload failed"));
+        });
+        
+        xhr.addEventListener("abort", () => {
+          console.log("Upload aborted");
+          reject(new Error("Upload aborted"));
+        });
+        
+        xhr.open("PUT", uploadUrl);
+        xhr.setRequestHeader("Content-Type", file.type);
+        xhr.send(file);
       });
-
-    if (error) {
-      console.log("Error uploading video:", error);
-      setUploading(false);
-      setUploadSuccess(false);
-      return;
+    } catch (error) {
+      console.error("Error uploading video:", error);
+      return null;
     }
-
-    const CDNLink = `${CDNURL}/${data.path}`;
-    setRawVideo(CDNLink);
-    setUploading(false);
-    setUploadProgress(100);
-    setUploadSuccess(true);
-  };
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -314,6 +368,9 @@ export default function VideoSubmissionForm() {
         agreedTerms,
         exclusiveRights,
         signature: signatureImage,
+        recordedBy, // New Q1
+        submittedElsewhere, // New Q2
+        otherCompanyName: submittedElsewhere === "Yes" ? otherCompanyName : "",
       };
 
       const response = await fetch(
@@ -378,7 +435,7 @@ export default function VideoSubmissionForm() {
                   required
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  placeholder="Paste your video link"
+                  placeholder="Enter your video title"
                   className="w-full p-3 bg-gray-900 text-white rounded-xl outline-none border border-gray-700 focus:ring-2 focus:ring-purple-500"
                 />
               </div>
@@ -406,22 +463,56 @@ export default function VideoSubmissionForm() {
                 id="videoUpload"
                 type="file"
                 accept="video/mp4, video/mov, video/avi, video/mkv, video/webm, video/ogg"
-                multiple
                 className="hidden"
-                onChange={(e) => handleFileUpload(e)}
+                onChange={async (e) => {
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    setUploading(true);
+                    setUploadProgress(0);
+                    setVideoFiles([file]);
+                    
+                    try {
+                      const uploadedVideoUrl = await uploadVideo(file);
+                      if (uploadedVideoUrl) {
+                        setRawVideo(uploadedVideoUrl);
+                        setUploadSuccess(true);
+                      } else {
+                        setUploadSuccess(false);
+                      }
+                    } catch (error) {
+                      console.error("Upload error:", error);
+                      setUploadSuccess(false);
+                    } finally {
+                      setUploading(false);
+                    }
+                  }
+                }}
               />
             </div>
 
             {uploading && (
-              <div className="w-full bg-gray-700 rounded-lg mt-3">
-                <div
-                  className="bg-purple-500 text-xs font-medium text-center p-1 leading-none rounded-lg"
-                  style={{ width: `${uploadProgress}%` }}
-                >
-                  {uploadProgress}%
+              <div className="relative w-full mt-3">
+                <div className="w-full bg-gray-700 rounded-lg">
+                  <div
+                    className="bg-purple-500 text-xs font-medium text-center p-1 leading-none rounded-lg"
+                    style={{ width: `${uploadProgress}%` }}
+                  >
+                    {uploadProgress}%
+                  </div>
                 </div>
+                <button 
+                  onClick={() => {
+                    setUploading(false);
+                    setVideoFiles([]);
+                    // Add cancel upload logic here if needed
+                  }}
+                  className="absolute right-0 top-0 -mt-1 bg-red-500 text-white px-2 py-1 rounded-full text-xs"
+                >
+                  Cancel
+                </button>
               </div>
             )}
+
             {uploadSuccess !== null && (
               <div
                 className={`text-sm font-medium text-start ${
@@ -518,6 +609,61 @@ export default function VideoSubmissionForm() {
             </div>
             {/* Checkboxes */}
             <div className="space-y-3 text-gray-300">
+              <div>
+                <label className="block mb-2 font-semibold">
+                  Who recorded this video? *
+                </label>
+                <div className="space-y-2">
+                  {["Me", "Friend", "Family", "Other"].map((option) => (
+                    <label key={option} className="flex items-center space-x-3">
+                      <input
+                        type="radio"
+                        name="recordedBy"
+                        value={option}
+                        checked={recordedBy === option}
+                        onChange={() => setRecordedBy(option)}
+                        className="w-5 h-5 text-purple-500 bg-gray-900 border border-gray-700 rounded"
+                      />
+                      <span>{option}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Q2: Was this submitted elsewhere? */}
+              <div>
+                <label className="block mb-2 font-semibold">
+                  Did you submit this video to another company? *
+                </label>
+                <div className="space-y-2">
+                  {["Yes", "No"].map((option) => (
+                    <label key={option} className="flex items-center space-x-3">
+                      <input
+                        type="radio"
+                        name="submittedElsewhere"
+                        value={option}
+                        checked={submittedElsewhere === option}
+                        onChange={() => {
+                          setSubmittedElsewhere(option);
+                          if (option === "No") setOtherCompanyName("");
+                        }}
+                        className="w-5 h-5 text-purple-500 bg-gray-900 border border-gray-700 rounded"
+                      />
+                      <span>{option}</span>
+                    </label>
+                  ))}
+
+                  {submittedElsewhere === "Yes" && (
+                    <input
+                      type="text"
+                      value={otherCompanyName}
+                      onChange={(e) => setOtherCompanyName(e.target.value)}
+                      placeholder="Enter company name"
+                      className="mt-2 block w-full px-4 py-2 bg-gray-900 border border-gray-700 text-white rounded"
+                    />
+                  )}
+                </div>
+              </div>
               <label className="flex items-center space-x-3">
                 <input
                   type="checkbox"
