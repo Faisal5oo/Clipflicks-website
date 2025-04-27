@@ -422,12 +422,18 @@ export default function VideoSubmissionForm() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
-          className="bg-black/80 backdrop-blur-md p-8 rounded-3xl shadow-2xl w-full max-w-3xl border border-gray-800 mt-14"
+          className="bg-black/90 p-8 rounded-xl w-full max-w-3xl mt-16"
         >
           <form className="space-y-6" onSubmit={handleSubmit}>
+            {/* Form header */}
+            <div className="mb-8">
+              <h3 className="text-2xl font-bold text-white">Video Submission Form</h3>
+              <div className="h-1 w-20 bg-[#712f8e] mt-2 rounded-full"></div>
+            </div>
+            
             {/* Video URL */}
             <div>
-              <label className="text-gray-300 font-medium">Video Title *</label>
+              <label className="text-white font-medium">Video Title *</label>
               <div className="relative mt-2">
                 <input
                   type="text"
@@ -435,12 +441,12 @@ export default function VideoSubmissionForm() {
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="Enter your video title"
-                  className="w-full p-3 bg-gray-900 text-white rounded-xl outline-none border border-gray-700 focus:ring-2 focus:ring-purple-500"
+                  className="w-full p-3 bg-black/60 text-white rounded-lg outline-none border border-gray-700 focus:border-[#712f8e] transition-colors"
                 />
               </div>
             </div>
             <div>
-              <label className="text-gray-300 font-medium">Video URL *</label>
+              <label className="text-white font-medium">Video URL *</label>
               <div className="relative mt-2">
                 <input
                   type="text"
@@ -448,16 +454,17 @@ export default function VideoSubmissionForm() {
                   value={videoURL}
                   onChange={(e) => setVideoURL(e.target.value)}
                   placeholder="Paste your video link"
-                  className="w-full p-3 bg-gray-900 text-white rounded-xl outline-none border border-gray-700 focus:ring-2 focus:ring-purple-500"
+                  className="w-full p-3 bg-black/60 text-white rounded-lg outline-none border border-gray-700 focus:border-[#712f8e] transition-colors"
                 />
               </div>
             </div>
             <div
-              className="flex flex-col items-center justify-center border-2 border-dashed border-gray-700 rounded-xl p-6 cursor-pointer hover:border-purple-500"
+              className="flex flex-col items-center justify-center border-2 border-dashed border-[#712f8e]/60 rounded-xl p-8 cursor-pointer hover:border-[#712f8e] transition-colors bg-black/40"
               onClick={() => document.getElementById("videoUpload").click()}
             >
-              <Plus className="text-gray-300 text-3xl" />
-              <p className="text-gray-400 mt-2">Click to upload video</p>
+              <Plus className="text-[#712f8e] text-4xl mb-2" />
+              <p className="text-white font-medium text-lg">Click to upload video</p>
+              <p className="text-gray-400 text-sm mt-1">MP4, MOV, AVI, MKV, WEBM, OGG</p>
               <input
                 id="videoUpload"
                 type="file"
@@ -469,12 +476,14 @@ export default function VideoSubmissionForm() {
                     setUploading(true);
                     setUploadProgress(0);
                     setVideoFiles([file]);
+                    setUploadSuccess(null);
                     
                     try {
                       const uploadedVideoUrl = await uploadVideo(file);
                       if (uploadedVideoUrl) {
                         setRawVideo(uploadedVideoUrl);
                         setUploadSuccess(true);
+                        setVideoURL(uploadedVideoUrl);
                       } else {
                         setUploadSuccess(false);
                       }
@@ -490,54 +499,63 @@ export default function VideoSubmissionForm() {
             </div>
 
             {uploading && (
-              <div className="relative w-full mt-3">
-                <div className="w-full bg-gray-700 rounded-lg">
+              <div className="w-full mt-4">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-white text-sm">Uploading video...</span>
+                  <button 
+                    onClick={() => {
+                      setUploading(false);
+                      setVideoFiles([]);
+                      window.currentUploadXHR?.abort();
+                      window.currentUploadXHR = null;
+                    }}
+                    className="bg-red-500 text-white px-3 py-1 rounded-lg text-xs font-medium hover:bg-red-600 transition-colors"
+                  >
+                    Cancel Upload
+                  </button>
+                </div>
+                <div className="w-full bg-gray-800 rounded-lg overflow-hidden">
                   <div
-                    className="bg-purple-500 text-xs font-medium text-center p-1 leading-none rounded-lg"
+                    className="bg-[#712f8e] text-xs font-medium text-center p-1.5 leading-none"
                     style={{ width: `${uploadProgress}%` }}
                   >
                     {uploadProgress}%
                   </div>
                 </div>
-                <button 
-                  onClick={() => {
-                    setUploading(false);
-                    setVideoFiles([]);
-                    // Add cancel upload logic here if needed
-                  }}
-                  className="absolute right-0 top-0 -mt-1 bg-red-500 text-white px-2 py-1 rounded-full text-xs"
-                >
-                  Cancel
-                </button>
               </div>
             )}
 
-            {uploadSuccess !== null && (
+            {uploadSuccess !== null && !uploading && (
               <div
-                className={`text-sm font-medium text-start ${
+                className={`text-sm font-medium flex items-center mt-2 ${
                   uploadSuccess ? "text-green-500" : "text-red-500"
                 }`}
               >
+                <span className={`mr-2 ${uploadSuccess ? "text-green-500" : "text-red-500"}`}>
+                  {uploadSuccess ? "✓" : "✗"}
+                </span>
                 {uploadSuccess
                   ? "Video Uploaded Successfully"
                   : "Failed to upload the video"}
               </div>
             )}
 
-            {videoFiles.length > 0 && (
-              <ul className="text-gray-300 mt-3">
+            {videoFiles.length > 0 && !uploading && (
+              <div className="bg-black/60 p-3 rounded-lg border border-gray-800 mt-3">
+                <p className="text-gray-400 text-sm mb-2">Uploaded file:</p>
                 {videoFiles.map((file, index) => (
-                  <li key={index} className="text-sm">
+                  <div key={index} className="flex items-center text-white text-sm">
+                    <span className="text-[#712f8e] mr-2">•</span>
                     {file.name}
-                  </li>
+                  </div>
                 ))}
-              </ul>
+              </div>
             )}
 
             {/* Name Fields */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="text-gray-300 font-medium">
+                <label className="text-white font-medium">
                   First Name *
                 </label>
                 <input
@@ -546,24 +564,24 @@ export default function VideoSubmissionForm() {
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
                   placeholder="Enter Your First Name"
-                  className="w-full mt-2 p-3 bg-gray-900 text-white rounded-xl border border-gray-700 outline-none focus:ring-2 focus:ring-purple-500"
+                  className="w-full mt-2 p-3 bg-black/60 text-white rounded-lg border border-gray-800 outline-none focus:border-[#712f8e] transition-colors"
                 />
               </div>
               <div>
-                <label className="text-gray-300 font-medium">Last Name *</label>
+                <label className="text-white font-medium">Last Name *</label>
                 <input
                   type="text"
                   required
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
                   placeholder="Enter Your Last Name"
-                  className="w-full mt-2 p-3 bg-gray-900 text-white rounded-xl border border-gray-700 outline-none focus:ring-2 focus:ring-purple-500"
+                  className="w-full mt-2 p-3 bg-black/60 text-white rounded-lg border border-gray-800 outline-none focus:border-[#712f8e] transition-colors"
                 />
               </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="text-gray-300 font-medium">
+                <label className="text-white font-medium">
                   Social Handle
                 </label>
                 <input
@@ -571,17 +589,17 @@ export default function VideoSubmissionForm() {
                   value={socialHandle}
                   placeholder="Enter Your Social Handle"
                   onChange={(e) => setSocialHandle(e.target.value)}
-                  className="w-full mt-2 p-3 bg-gray-900 text-white rounded-xl border border-gray-700 outline-none focus:ring-2 focus:ring-purple-500"
+                  className="w-full mt-2 p-3 bg-black/60 text-white rounded-lg border border-gray-800 outline-none focus:border-[#712f8e] transition-colors"
                 />
               </div>
               <div>
-                <label className="text-gray-300 font-medium">Country *</label>
+                <label className="text-white font-medium">Country *</label>
                 <select
                   value={country}
                   onChange={(e) => setCountry(e.target.value)}
                   required
                   placeholder="Select Your Country"
-                  className="w-full mt-2 p-3 bg-gray-900 text-white rounded-xl border border-gray-700 outline-none focus:ring-2 focus:ring-purple-500"
+                  className="w-full mt-2 p-3 bg-black/60 text-white rounded-lg border border-gray-800 outline-none focus:border-[#712f8e] transition-colors"
                 >
                   <option value="">Select a country</option>
                   {countries.map((c, index) => (
@@ -592,51 +610,49 @@ export default function VideoSubmissionForm() {
                 </select>
               </div>
             </div>
-            {/* Video Upload */}
-
             {/* Email */}
             <div>
-              <label className="text-gray-300 font-medium">Email *</label>
+              <label className="text-white font-medium">Email *</label>
               <input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
-                className="w-full mt-2 p-3 bg-gray-900 text-white rounded-xl border border-gray-700 outline-none focus:ring-2 focus:ring-purple-500"
+                className="w-full mt-2 p-3 bg-black/60 text-white rounded-lg border border-gray-800 outline-none focus:border-[#712f8e] transition-colors"
               />
             </div>
             {/* Checkboxes */}
-            <div className="space-y-3 text-gray-300">
+            <div className="space-y-5 text-white">
               <div>
-                <label className="block mb-2 font-semibold">
+                <label className="block mb-3 font-semibold text-lg">
                   Who recorded this video? *
                 </label>
-                <div className="space-y-2">
+                <div className="grid grid-cols-2 gap-3">
                   {["Me", "Friend", "Family", "Other"].map((option) => (
-                    <label key={option} className="flex items-center space-x-3">
+                    <label key={option} className="flex items-center space-x-3 bg-black/60 p-3 rounded-lg hover:bg-[#712f8e]/10 transition-colors cursor-pointer border border-gray-800">
                       <input
                         type="radio"
                         name="recordedBy"
                         value={option}
                         checked={recordedBy === option}
                         onChange={() => setRecordedBy(option)}
-                        className="w-5 h-5 text-purple-500 bg-gray-900 border border-gray-700 rounded"
+                        className="w-5 h-5 text-[#712f8e] bg-black border border-gray-700 rounded accent-[#712f8e] focus:ring-[#712f8e]"
                       />
-                      <span>{option}</span>
+                      <span className="font-medium">{option}</span>
                     </label>
                   ))}
                 </div>
               </div>
 
               {/* Q2: Was this submitted elsewhere? */}
-              <div>
-                <label className="block mb-2 font-semibold">
+              <div className="mt-6">
+                <label className="block mb-3 font-semibold text-lg">
                   Did you submit this video to another company? *
                 </label>
-                <div className="space-y-2">
+                <div className="space-y-3">
                   {["Yes", "No"].map((option) => (
-                    <label key={option} className="flex items-center space-x-3">
+                    <label key={option} className="flex items-center space-x-3 bg-black/60 p-3 rounded-lg hover:bg-[#712f8e]/10 transition-colors cursor-pointer border border-gray-800">
                       <input
                         type="radio"
                         name="submittedElsewhere"
@@ -646,9 +662,9 @@ export default function VideoSubmissionForm() {
                           setSubmittedElsewhere(option);
                           if (option === "No") setOtherCompanyName("");
                         }}
-                        className="w-5 h-5 text-purple-500 bg-gray-900 border border-gray-700 rounded"
+                        className="w-5 h-5 text-[#712f8e] bg-black border border-gray-700 rounded accent-[#712f8e] focus:ring-[#712f8e]"
                       />
-                      <span>{option}</span>
+                      <span className="font-medium">{option}</span>
                     </label>
                   ))}
 
@@ -658,27 +674,27 @@ export default function VideoSubmissionForm() {
                       value={otherCompanyName}
                       onChange={(e) => setOtherCompanyName(e.target.value)}
                       placeholder="Enter company name"
-                      className="mt-2 block w-full px-4 py-2 bg-gray-900 border border-gray-700 text-white rounded"
+                      className="mt-3 block w-full p-3 bg-black/60 text-white rounded-lg border border-gray-800 outline-none focus:border-[#712f8e] transition-colors"
                     />
                   )}
                 </div>
               </div>
-              <label className="flex items-center space-x-3">
+              <label className="flex items-center space-x-3 bg-black/60 p-3 rounded-lg hover:bg-[#712f8e]/10 transition-colors cursor-pointer border border-gray-800">
                 <input
                   type="checkbox"
                   checked={agreed18}
                   onChange={() => setAgreed18(!agreed18)}
-                  className="w-5 h-5 text-purple-500 bg-gray-900 border border-gray-700 rounded"
+                  className="w-5 h-5 text-[#712f8e] bg-black border border-gray-700 rounded accent-[#712f8e]"
                 />
                 <span>I verify that I am at least 18 years old *</span>
               </label>
 
-              <label className="flex items-center space-x-3">
+              <label className="flex items-center space-x-3 bg-black/60 p-3 rounded-lg hover:bg-[#712f8e]/10 transition-colors cursor-pointer border border-gray-800">
                 <input
                   type="checkbox"
                   checked={agreedTerms}
                   onChange={() => setAgreedTerms(!agreedTerms)}
-                  className="w-5 h-5 text-purple-500 bg-gray-900 border border-gray-700 rounded"
+                  className="w-5 h-5 text-[#712f8e] bg-black border border-gray-700 rounded accent-[#712f8e]"
                 />
                 <span>
                   I acknowledge and consent to the Terms of Submission and
@@ -686,12 +702,12 @@ export default function VideoSubmissionForm() {
                 </span>
               </label>
 
-              <label className="flex items-center space-x-3">
+              <label className="flex items-center space-x-3 bg-black/60 p-3 rounded-lg hover:bg-[#712f8e]/10 transition-colors cursor-pointer border border-gray-800">
                 <input
                   type="checkbox"
                   checked={exclusiveRights}
                   onChange={() => setExclusiveRights(!exclusiveRights)}
-                  className="w-5 h-5 text-purple-500 bg-gray-900 border border-gray-700 rounded"
+                  className="w-5 h-5 text-[#712f8e] bg-black border border-gray-700 rounded accent-[#712f8e]"
                 />
                 <span>
                   I have not given exclusive rights to this video to anyone *
@@ -700,36 +716,36 @@ export default function VideoSubmissionForm() {
             </div>
             {/* Signature Section */}
             <div>
-              <label className="text-gray-300 font-medium">Signature *</label>
-              <div className="mt-2 bg-white rounded-lg p-3">
+              <label className="text-white font-medium mb-2 block">Signature *</label>
+              <div className="mt-2 bg-white rounded-lg p-3 border border-gray-300">
                 <SignatureCanvas
                   ref={signRef}
                   penColor="black"
                   canvasProps={{
                     width: 500,
-                    height: 250,
+                    height: 200,
                     className: "rounded-lg sigCanvas",
                   }}
                 />
               </div>
               <button
                 type="button"
-                className="p-4 bg-black text-white rounded-full mt-2"
+                className="mt-3 px-4 py-2 bg-black text-white rounded-lg border border-gray-700 hover:bg-gray-900 transition-colors"
                 onClick={handleClear}
               >
-                Clear
+                Clear Signature
               </button>
             </div>
 
             {/* Submit Button */}
             <motion.button
               type="submit"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
               disabled={loading}
-              className="w-full py-3 bg-purple-500 hover:from-purple-700 hover:to-blue-600 text-white font-semibold rounded-xl transition shadow-lg"
+              className="w-full py-4 mt-6 bg-[#712f8e] hover:bg-[#8a3dad] text-white font-semibold rounded-lg transition-colors"
             >
-              {loading ? "Submitting..." : "Please Submit Video"}
+              {loading ? "Submitting..." : "Submit Your Video"}
             </motion.button>
           </form>
         </motion.div>

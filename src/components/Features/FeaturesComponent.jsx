@@ -25,40 +25,60 @@ const features = [
   },
 ];
 
-const WhyChooseUs = () => {
+export default function WhyChooseUs() {
+  // Using the client's original content
   return (
-    <section className="bg-gradient-to-b from-black via-gray-900 to-black text-white py-20 px-6">
-      <div className="max-w-6xl mx-auto text-center">
-        <motion.h2
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
-          className="text-5xl font-bold text-purple-500"
-        >
-          Why Choose <span className="text-white">Us?</span>
-        </motion.h2>
-        <p className="text-gray-300 mt-4 text-lg">
-          We provide the best platform for content creators to monetize their work.
-        </p>
-      </div>
-
-      <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
-        {features.map((feature, index) => (
-          <motion.div
-            key={index}
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: index * 0.2 }}
-            className="bg-gray-800 bg-opacity-60 p-6 rounded-2xl shadow-lg flex flex-col items-center text-center hover:bg-purple-500 transition-all duration-300"
-          >
-            <div className="text-white">{feature.icon}</div>
-            <h3 className="text-2xl font-semibold mt-4">{feature.title}</h3>
-            <p className="text-gray-300 mt-2">{feature.description}</p>
-          </motion.div>
-        ))}
+    <section className="py-16">
+      <div className="max-w-6xl mx-auto px-6">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-bold mb-4">
+            <span className="text-white">Why </span>
+            <span className="text-[#712f8e]">Choose Us</span>
+          </h2>
+          <div className="h-1 w-20 bg-[#712f8e] mx-auto rounded-full"></div>
+        </div>
+        
+        {/* Original client content for WhyChooseUs */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {[
+            {
+              title: "Global Network",
+              description: "Connect with media buyers and content distributors from around the world"
+            },
+            {
+              title: "Fair Compensation",
+              description: "Get paid what your content is worth with transparent pricing"
+            },
+            {
+              title: "Copyright Protection",
+              description: "We actively protect your content rights across digital platforms"
+            },
+            {
+              title: "Quick Payments",
+              description: "Receive payments faster with our streamlined processing system"
+            },
+            {
+              title: "Easy Submission",
+              description: "Submit your videos with our simple, user-friendly platform"
+            },
+            {
+              title: "Dedicated Support",
+              description: "Our team is available to assist you throughout the process"
+            }
+          ].map((feature, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              className="bg-black/60 p-6 rounded-lg border border-gray-800"
+            >
+              <h3 className="text-[#712f8e] text-xl font-bold mb-3">{feature.title}</h3>
+              <p className="text-gray-300">{feature.description}</p>
+            </motion.div>
+          ))}
+        </div>
       </div>
     </section>
   );
-};
-
-export default WhyChooseUs;
+}

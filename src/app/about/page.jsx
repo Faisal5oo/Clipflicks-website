@@ -8,22 +8,29 @@ export default function AboutUs() {
   return (
     <LayoutWrapper>
       <div className="min-h-screen bg-black text-white">
-        {/* 🚀 Hero Section */}
+        {/* Hero Section with Pexels image */}
         <section className="relative h-screen flex items-center justify-center text-center">
           <Image
-            src="https://images.pexels.com/photos/1146134/pexels-photo-1146134.jpeg"
+            src="https://images.pexels.com/photos/2833037/pexels-photo-2833037.jpeg"
             layout="fill"
             objectFit="cover"
-            alt="Futuristic Background"
+            alt="Video Production"
             className="opacity-50"
+            priority
           />
+          <div className="absolute inset-0 bg-gradient-to-b from-black via-black/80 to-[#712f8e]/20"></div>
+          
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1 }}
             className="z-10 px-6"
           >
-            <h1 className="text-5xl font-extrabold tracking-wide text-purple-500"><span className="text-white">About</span> Us</h1>
+            <h1 className="text-5xl md:text-6xl font-bold mb-6">
+              <span className="text-white">About</span>
+              <span className="text-[#712f8e]"> Us</span>
+            </h1>
+            
             <p className="mt-4 text-sm text-gray-300 max-w-2xl mx-auto">
               At the vanguard of the user-generated content industry, we are
               facilitating the connection between creators and distributors on a
@@ -34,11 +41,13 @@ export default function AboutUs() {
               in custom licensing requests and briefs, ensuring we meet the
               specific and bulk content needs of our clients.
             </p>
+            
             <Link href={"/submit-video"}>
               <motion.button
-                whileHover={{ scale: 1.1 }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 transition={{ duration: 0.3 }}
-                className="mt-6 bg-purple-500 px-6 py-3 rounded-full text-lg font-semibold shadow-lg"
+                className="mt-6 bg-[#712f8e] px-6 py-3 rounded-lg text-lg font-semibold"
               >
                 Submit Video
               </motion.button>
@@ -46,7 +55,7 @@ export default function AboutUs() {
           </motion.div>
         </section>
 
-        {/* 🌍 How It Works */}
+        {/* Library Section - Original Content */}
         <section className="relative py-20">
           <Image
             src="https://images.pexels.com/photos/2608517/pexels-photo-2608517.jpeg"
@@ -65,93 +74,84 @@ export default function AboutUs() {
               Our Library
             </motion.h2>
             <p className="mt-4 text-lg text-gray-300">
-            Our extensive video library is home to some of the most widely shared and replicated clips on the internet
+              Our extensive video library is home to some of the most widely shared and replicated clips on the internet
             </p>
           </div>
         </section>
 
-        {/* 🔮 Why Sell Your Videos? */}
-        {/* <section className="py-20 flex flex-col md:flex-row items-center gap-10 max-w-6xl mx-auto">
-          <motion.div
-            initial={{ x: -50, opacity: 0 }}
-            whileInView={{ x: 0, opacity: 1 }}
-            transition={{ duration: 1 }}
-            className="md:w-1/2"
-          >
-            <Image
-              src="https://images.pexels.com/photos/2608517/pexels-photo-2608517.jpeg"
-              width={600}
-              height={400}
-              alt="Why Sell?"
-              className="rounded-lg shadow-lg"
-            />
-          </motion.div>
-          <motion.div
-            initial={{ x: 50, opacity: 0 }}
-            whileInView={{ x: 0, opacity: 1 }}
-            transition={{ duration: 1 }}
-            className="md:w-1/2"
-          >
-            <h2 className="text-4xl font-bold">Why Sell Your Videos?</h2>
-            <p className="mt-4 text-lg text-gray-300">
-              Brands, media companies, and content creators are always looking
-              for high-quality, original footage. By selling your videos on our
-              platform, you get exposure to a **global market** and **earn
-              revenue effortlessly**.
+        {/* Global Reach Section with World Map */}
+        <section className="py-20 px-6">
+          <div className="max-w-6xl mx-auto">
+            {/* <div className="text-center mb-16">
+              <h2 className="text-4xl font-bold mb-4">
+                <span className="text-white">Global </span>
+                <span className="text-[#712f8e]">Reach</span>
+              </h2>
+              <div className="h-1 w-20 bg-[#712f8e] mx-auto rounded-full"></div>
+              <p className="text-gray-300 mt-6 max-w-2xl mx-auto">
+                Our network spans across continents, connecting creators with media companies worldwide
+              </p>
+            </div> */}
+            
+            {/* <div className="relative">
+              <div className="absolute -inset-4 bg-[#712f8e]/20 rounded-lg blur-lg opacity-30"></div>
+              <img 
+                src="https://images.pexels.com/photos/1098536/pexels-photo-1098536.jpeg" 
+                alt="Global Reach"
+                className="relative rounded-lg w-full h-auto border border-gray-800"
+              />
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-12">
+              {[
+                { stat: "100+", label: "Countries" },
+                { stat: "1M+", label: "Monthly Views" },
+                { stat: "20K+", label: "Content Creators" },
+                { stat: "$5M+", label: "Creator Payouts" }
+              ].map((item, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: index * 0.1 }}
+                  className="bg-black border border-gray-800 rounded-xl p-6 text-center"
+                >
+                  <div className="text-3xl font-bold text-[#712f8e] mb-2">{item.stat}</div>
+                  <div className="text-gray-300">{item.label}</div>
+                </motion.div>
+              ))}
+            </div> */}
+          </div>
+        </section>
+
+        {/* Contact Section - Simple with specific email */}
+        <section className="py-4 px-6 bg-black/50">
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-4xl font-bold mb-4">
+              <span className="text-white">Contact </span>
+              <span className="text-[#712f8e]">Us</span>
+            </h2>
+            <div className="h-1 w-20 bg-[#712f8e] mx-auto rounded-full mb-6"></div>
+            
+            <p className="text-gray-300 mb-8 text-lg">
+              Have questions or need assistance? Reach out to our team directly.
             </p>
-          </motion.div>
-        </section> */}
-
-        {/* ⚡ Features */}
-        {/* <section className="py-20 bg-gray-900">
-          <h2 className="text-4xl font-bold text-center">Platform Features</h2>
-          <div className="flex flex-wrap justify-center mt-10 gap-6">
-            {[
-              { title: "Earn Instantly", desc: "Sell your videos and get paid quickly with secure transactions." },
-              { title: "AI Video Matching", desc: "Our AI recommends your videos to the right buyers." },
-              { title: "No Hidden Fees", desc: "We provide transparent pricing with no extra charges." }
-            ].map((feature, index) => (
-              <motion.div
-                key={index}
-                initial={{ scale: 0.8, opacity: 0 }}
-                whileInView={{ scale: 1, opacity: 1 }}
-                transition={{ duration: 0.5, delay: index * 0.2 }}
-                className="bg-gray-800 p-6 rounded-lg shadow-lg text-center w-80"
-              >
-                <h3 className="text-2xl font-semibold text-purple-400">{feature.title}</h3>
-                <p className="mt-2 text-gray-300">{feature.desc}</p>
-              </motion.div>
-            ))}
+            
+            <div className="bg-black/60 py-6 px-8 rounded-xl inline-flex items-center border border-gray-800">
+              <div className="w-12 h-12 bg-[#712f8e]/20 rounded-full flex items-center justify-center mr-4">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-[#712f8e]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <div className="text-left">
+                <p className="text-gray-400 text-sm">Email Us At</p>
+                <a href="mailto:clipsflickofficial@gmail.com" className="text-white text-lg hover:text-[#712f8e] transition-colors">
+                  clipsflickofficial@gmail.com
+                </a>
+              </div>
+            </div>
           </div>
-        </section> */}
-
-        {/* 🎥 Our Video Creators */}
-        {/* <section className="py-20 max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold text-center">
-            Meet Our Top Creators
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mt-10">
-            {[1, 2, 3].map((id) => (
-              <motion.div
-                key={id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: id * 0.2 }}
-                className="bg-gray-800 p-6 rounded-lg shadow-lg text-center"
-              >
-                <Image
-                  src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg"
-                  width={150}
-                  height={150}
-                  alt="Creator"
-                  className="rounded-full mx-auto"
-                />
-                <h3 className="text-xl font-semibold mt-4">John Doe</h3>
-                <p className="text-gray-400">Top Earning Creator</p>
-              </motion.div>
-            ))}
-          </div>
-        </section> */}
+        </section>
       </div>
     </LayoutWrapper>
   );
