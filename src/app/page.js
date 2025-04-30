@@ -328,7 +328,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Testimonials Section with Pexels avatars */}
+      {/* Testimonials Section with Pexels avatars - Commented out as requested */}
+      {/*
       <div className="mt-24">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold mb-4">
@@ -375,8 +376,8 @@ export default function Home() {
               <div className="flex items-center">
                 <div className="w-12 h-12 rounded-full overflow-hidden mr-4 border-2 border-[#712f8e]">
                   <img src={testimonial.avatar} alt={testimonial.name} className="w-full h-full object-cover" />
-        </div>
-        <div>
+                </div>
+                <div>
                   <h4 className="text-white font-semibold">{testimonial.name}</h4>
                   <p className="text-gray-400 text-sm">{testimonial.role}</p>
                 </div>
@@ -385,6 +386,7 @@ export default function Home() {
           ))}
         </div>
       </div>
+      */}
     </LayoutWrapper>
   );
 }

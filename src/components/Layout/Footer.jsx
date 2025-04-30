@@ -13,11 +13,11 @@ const Footer = () => {
           <img src="/cf-logo.jpg" alt="Logo" className="h-8 w-auto mr-2" />
         </Link>
           <p className="text-gray-400 text-xs max-w-xs leading-relaxed">
-            VideoSite is your go-to platform for sharing and discovering amazing videos. 
-            Join our community and be part of the future of content creation!
+            ClipsFlick is your go-to platform for sharing and monetizing your creative videos. 
+            Join our community of creators from around the world!
           </p>
           <p className="text-gray-500 text-xs mt-2">
-            © {new Date().getFullYear()} VideoSite. All rights reserved.
+            © {new Date().getFullYear()} ClipsFlick. All rights reserved.
           </p>
         </div>
 

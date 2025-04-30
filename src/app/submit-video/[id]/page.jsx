@@ -486,7 +486,6 @@ export default function VideoSubmissionForm() {
                       if (uploadedVideoUrl) {
                         setRawVideo(uploadedVideoUrl);
                         setUploadSuccess(true);
-                        setVideoURL(uploadedVideoUrl);
                       } else {
                         setUploadSuccess(false);
                       }
@@ -510,6 +509,7 @@ export default function VideoSubmissionForm() {
                     onClick={() => {
                       setUploading(false);
                       setVideoFiles([]);
+                      setUploadSuccess(null);
                       window.currentUploadXHR?.abort();
                       window.currentUploadXHR = null;
                     }}
