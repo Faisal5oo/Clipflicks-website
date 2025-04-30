@@ -483,7 +483,6 @@ export default function VideoSubmissionForm() {
                       if (uploadedVideoUrl) {
                         setRawVideo(uploadedVideoUrl);
                         setUploadSuccess(true);
-                        setVideoURL(uploadedVideoUrl);
                       } else {
                         setUploadSuccess(false);
                       }
