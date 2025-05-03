@@ -387,6 +387,25 @@ export default function VideoSubmissionForm() {
 
       alert("Video submitted successfully!");
 
+      // Clear form fields after submission
+      setTitle("");
+      setVideoURL("");
+      setFirstName("");
+      setLastName("");
+      setSocialHandle("");
+      setCountry("");
+      setEmail("");
+      setVideoFiles([]);
+      setRawVideo("");
+      setRecordedVideo(false);
+      setNotUploadedElsewhere(false);
+      setRecordedBy("");
+      setSubmittedElsewhere("");
+      setOtherCompanyName("");
+      setAgreed18(false);
+      setAgreedTerms(false);
+      setExclusiveRights(false);
+
       // Clear signature pad after submission
       if (signRef.current) signRef.current.clear();
     } catch (err) {
@@ -405,25 +424,41 @@ export default function VideoSubmissionForm() {
 
   return (
     <LayoutWrapper>
-      {/* Background with subtle gradient */}
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-black px-6 py-20 relative overflow-hidden">
-        {/* Floating Gradient Text */}
-        <motion.h2
+      {/* Enhanced premium background with gradient effect */}
+      <div className="min-h-screen flex items-center justify-center px-6 py-20 relative overflow-hidden">
+        {/* Background Pattern and Gradients */}
+        <div className="absolute inset-0 bg-black pointer-events-none">
+          <div className="absolute top-0 left-0 w-full h-full bg-[url('/grid-pattern.svg')] bg-center opacity-[0.03]"></div>
+          <div className="absolute top-1/3 right-1/4 w-80 h-80 bg-[#712f8e]/10 rounded-full blur-[120px]"></div>
+          <div className="absolute bottom-1/4 left-1/3 w-60 h-60 bg-[#d601db]/10 rounded-full blur-[100px]"></div>
+        </div>
+
+        {/* Enhanced Floating Gradient Title */}
+        <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
-          className="absolute top-10 text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-white text-center w-full"
+          className="absolute top-32 md:top-28 left-0 right-0 text-center z-10"
         >
-          Submit Your Creative Video
-        </motion.h2>
+          <h1 className="text-4xl md:text-6xl font-bold">
+            <span className="text-white">Submit Your </span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#712f8e] to-[#d601db]">Creative Video</span>
+          </h1>
+          <div className="h-1 w-24 bg-gradient-to-r from-[#712f8e] to-[#d601db] mx-auto rounded-full mt-4"></div>
+          {/* <p className="text-gray-300 max-w-xl mx-auto mt-6">
+            Share your creative content with our global network of media buyers and start earning revenue
+          </p> */}
+        </motion.div>
 
-        {/* Animated Form Container */}
+        {/* Premium Animated Form Container */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
-          className="bg-black/90 p-8 rounded-xl w-full max-w-3xl mt-16"
+          className="relative bg-black/60 backdrop-blur-md p-8 md:p-10 rounded-2xl border border-gray-800 w-full max-w-4xl mt-36 md:mt-40 shadow-xl shadow-[#712f8e]/5 z-10"
         >
+          {/* Premium gradient accent */}
+          <div className="absolute top-0 right-0 w-full h-1 bg-gradient-to-r from-[#712f8e] to-[#d601db] rounded-t-2xl"></div>
           <form className="space-y-6" onSubmit={handleSubmit}>
             {/* Form header */}
             <div className="mb-8">
@@ -461,11 +496,14 @@ export default function VideoSubmissionForm() {
             </div>
             
             {/* Video upload area with improved styling */}
-            <div
-              className="flex flex-col items-center justify-center border-2 border-dashed border-[#712f8e]/60 rounded-xl p-8 cursor-pointer hover:border-[#712f8e] transition-colors bg-black/40"
+            <motion.div
+              whileHover={{ scale: 1.01 }}
+              className="flex flex-col items-center justify-center border-2 border-dashed border-[#712f8e]/60 rounded-xl p-8 cursor-pointer hover:border-[#712f8e] transition-all bg-black/40 group"
               onClick={() => document.getElementById("videoUpload").click()}
             >
-              <Plus className="text-[#712f8e] text-4xl mb-2" />
+              <div className="w-16 h-16 rounded-full bg-[#712f8e]/10 flex items-center justify-center mb-3 group-hover:bg-[#712f8e]/20 transition-colors">
+                <Plus className="text-[#d601db] text-2xl" />
+              </div>
               <p className="text-white font-medium text-lg">Click to upload video</p>
               <p className="text-gray-400 text-sm mt-1">MP4, MOV, AVI, MKV, WEBM, OGG</p>
               <input
@@ -499,7 +537,7 @@ export default function VideoSubmissionForm() {
                   }
                 }}
               />
-            </div>
+            </motion.div>
 
             {/* Progress bar with improved styling */}
             {uploading && (
@@ -732,7 +770,7 @@ export default function VideoSubmissionForm() {
                   ref={signRef}
                   penColor="black"
                   canvasProps={{
-                    width: 500,
+                    width: 800,
                     height: 200,
                     className: "rounded-lg sigCanvas",
                   }}
@@ -750,12 +788,22 @@ export default function VideoSubmissionForm() {
             {/* Submit button with brand color */}
             <motion.button
               type="submit"
-              whileHover={{ scale: 1.02 }}
+              whileHover={{ scale: 1.02, boxShadow: "0 10px 25px -5px rgba(113, 47, 142, 0.4)" }}
               whileTap={{ scale: 0.98 }}
               disabled={loading}
-              className="w-full py-4 mt-6 bg-[#712f8e] hover:bg-[#8a3dad] text-white font-semibold rounded-lg transition-colors"
+              className="w-full py-4 mt-8 bg-gradient-to-r from-[#712f8e] to-[#d601db] text-white font-semibold rounded-lg transition-all shadow-lg shadow-[#712f8e]/20"
             >
-              {loading ? "Submitting..." : "Submit Your Video"}
+              {loading ? (
+                <div className="flex items-center justify-center">
+                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Submitting...
+                </div>
+              ) : (
+                "Submit Your Video"
+              )}
             </motion.button>
           </form>
         </motion.div>

@@ -1,83 +1,136 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { ShieldCheck, Globe, DollarSign, Zap } from "lucide-react";
-
-const features = [
-  {
-    icon: <ShieldCheck size={40} />,
-    title: "Secure Transactions",
-    description: "Your videos are protected with end-to-end encryption.",
-  },
-  {
-    icon: <DollarSign size={40} />,
-    title: "Instant Payments",
-    description: "Receive payments immediately after a successful sale.",
-  },
-  {
-    icon: <Globe size={40} />,
-    title: "Global Marketplace",
-    description: "Sell your videos to a worldwide audience in one click.",
-  },
-  {
-    icon: <Zap size={40} />,
-    title: "Seamless Experience",
-    description: "Upload, manage, and sell videos effortlessly.",
-  },
-];
+import { ShieldCheck, Globe, DollarSign, Zap, Upload, Headset } from "lucide-react";
 
 export default function WhyChooseUs() {
-  // Using the client's original content
+  const features = [
+    {
+      icon: <Globe size={28} />,
+      title: "Global Network",
+      description: "Connect seamlessly with trusted media buyers and content distributors worldwide."
+    },
+    {
+      icon: <DollarSign size={28} />,
+      title: "Fair Compensation",
+      description: "Receive fair and transparent payment for the true value of your content."
+    },
+    {
+      icon: <ShieldCheck size={28} />,
+      title: "Copyright Protection",
+      description: "Safeguard your rights — we actively protect your content across all major digital platforms."
+    },
+    {
+      icon: <Zap size={28} />,
+      title: "Quick Payments",
+      description: "Get paid faster with our streamlined and reliable payment system."
+    },
+    {
+      icon: <Upload size={28} />,
+      title: "Easy Submission",
+      description: "Use our simple, user-friendly platform to submit your videos effortlessly."
+    },
+    {
+      icon: <Headset size={28} />,
+      title: "Dedicated Support",
+      description: "Our expert team is available to assist and guide you throughout every step of the process."
+    }
+  ];
+
   return (
-    <section className="py-16">
-      <div className="max-w-6xl mx-auto px-6">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold mb-4">
-            <span className="text-white">Why </span>
-            <span className="text-[#712f8e]">Choose Us</span>
-          </h2>
-          <div className="h-1 w-20 bg-[#712f8e] mx-auto rounded-full"></div>
-        </div>
+    <section className="py-20 relative overflow-hidden">
+      {/* Background Elements */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-[#712f8e]/10 rounded-full blur-[100px] transform translate-x-1/2 -translate-y-1/2"></div>
+        <div className="absolute bottom-0 left-0 w-1/4 h-1/4 bg-[#d601db]/10 rounded-full blur-[100px] transform -translate-x-1/2 translate-y-1/2"></div>
         
-        {/* Original client content for WhyChooseUs */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {[
-            {
-              title: "Global Network",
-              description: "Connect with media buyers and content distributors from around the world"
-            },
-            {
-              title: "Fair Compensation",
-              description: "Get paid what your content is worth with transparent pricing"
-            },
-            {
-              title: "Copyright Protection",
-              description: "We actively protect your content rights across digital platforms"
-            },
-            {
-              title: "Quick Payments",
-              description: "Receive payments faster with our streamlined processing system"
-            },
-            {
-              title: "Easy Submission",
-              description: "Submit your videos with our simple, user-friendly platform"
-            },
-            {
-              title: "Dedicated Support",
-              description: "Our team is available to assist you throughout the process"
-            }
-          ].map((feature, index) => (
+        {/* Grid pattern */}
+        <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] bg-center opacity-5"></div>
+      </div>
+
+      <div className="max-w-6xl mx-auto px-6 relative z-10">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          viewport={{ once: true }}
+          className="text-center mb-16"
+        >
+          <motion.h2 
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            viewport={{ once: true }}
+            className="text-4xl md:text-5xl font-bold mb-6 relative inline-block"
+          >
+            <span className="text-white">Why </span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#712f8e] to-[#d601db]">Choose Us</span>
+          </motion.h2>
+          
+          <div className="h-1 w-24 bg-gradient-to-r from-[#712f8e] to-[#d601db] mx-auto rounded-full mb-6"></div>
+          
+          <motion.p
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+            viewport={{ once: true }}
+            className="text-gray-300 max-w-2xl mx-auto text-lg"
+          >
+            We provide industry-leading solutions to help creators maximize their content's value
+          </motion.p>
+        </motion.div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {features.map((feature, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="bg-black/60 p-6 rounded-lg border border-gray-800"
+              viewport={{ once: true, margin: "-50px" }}
+              whileHover={{ 
+                y: -5,
+                boxShadow: "0 10px 30px -10px rgba(113, 47, 142, 0.2)",
+                borderColor: "#712f8e"
+              }}
+              className="bg-gradient-to-b from-gray-900 to-black p-8 rounded-2xl border border-gray-800 backdrop-blur-sm shadow-lg transition-all duration-300 group"
             >
-              <h3 className="text-[#712f8e] text-xl font-bold mb-3">{feature.title}</h3>
-              <p className="text-gray-300">{feature.description}</p>
+              <div className="relative mb-6 inline-flex">
+                <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-[#712f8e] to-[#d601db] opacity-0 blur-xl group-hover:opacity-20 transition-opacity duration-500"></div>
+                <div className="relative flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-[#712f8e]/20 to-transparent">
+                  <div className="text-[#d601db] group-hover:text-white transition-colors duration-300">
+                    {feature.icon}
+                  </div>
+                </div>
+              </div>
+              
+              <h3 className="text-white text-xl font-bold mb-3 group-hover:text-[#d601db] transition-colors duration-300">
+                {feature.title}
+              </h3>
+              
+              <p className="text-gray-400 group-hover:text-gray-300 transition-colors duration-300">
+                {feature.description}
+              </p>
             </motion.div>
           ))}
         </div>
+        
+        {/* Call to Action */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5, delay: 0.6 }}
+          viewport={{ once: true }}
+          className="mt-16 text-center"
+        >
+          <motion.a
+            href="/submit-video"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.98 }}
+            className="inline-block px-8 py-4 bg-gradient-to-r from-[#712f8e] to-[#d601db] text-white font-semibold rounded-xl shadow-lg shadow-[#712f8e]/20 hover:shadow-xl hover:shadow-[#712f8e]/30 transition-all"
+          >
+            Start Monetizing Your Videos
+          </motion.a>
+        </motion.div>
       </div>
     </section>
   );

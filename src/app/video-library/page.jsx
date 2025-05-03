@@ -6,55 +6,7 @@ import LayoutWrapper from "../../components/Layout/LayoutWrapper";
 
 // Sample videos with Pexels images
 const videos = [
-  {
-    id: 1,
-    title: "Urban City Timelapses",
-    description: "Experience the beautiful urban landscapes and architectural marvels in this stunning visual montage.",
-    category: "Technology",
-    thumbnail: "https://images.pexels.com/photos/1707820/pexels-photo-1707820.jpeg"
-  },
-  {
-    id: 2,
-    title: "Wildlife Encounters",
-    description: "Get up close with nature's most magnificent creatures in their natural habitats.",
-    category: "Nature",
-    thumbnail: "https://images.pexels.com/photos/41178/africa-animal-big-carnivore-41178.jpeg"
-  },
-  {
-    id: 3,
-    title: "Aerial Landscapes",
-    description: "Breathtaking drone footage showcasing the beauty of our planet from above.",
-    category: "Science",
-    thumbnail: "https://images.pexels.com/photos/1671324/pexels-photo-1671324.jpeg"
-  },
-  {
-    id: 4,
-    title: "Ocean Adventures",
-    description: "Dive into the deep blue and discover the wonders of marine life and ocean landscapes.",
-    category: "Nature",
-    thumbnail: "https://images.pexels.com/photos/1738991/pexels-photo-1738991.jpeg"
-  },
-  {
-    id: 5,
-    title: "Mountain Exploration",
-    description: "Journey through rugged peaks and serene valleys in this mountain adventure series.",
-    category: "Science",
-    thumbnail: "https://images.pexels.com/photos/691668/pexels-photo-691668.jpeg"
-  },
-  {
-    id: 6,
-    title: "Tech Innovations",
-    description: "Discover the latest technological breakthroughs and innovations shaping our future.",
-    category: "Technology",
-    thumbnail: "https://images.pexels.com/photos/2582937/pexels-photo-2582937.jpeg"
-  },
-  {
-    id: 7,
-    title: "Sunset Collections",
-    description: "A stunning compilation of magical sunset moments from across the globe.",
-    category: "Nature",
-    thumbnail: "https://images.pexels.com/photos/1032650/pexels-photo-1032650.jpeg"
-  }
+  
 ];
 
 export default function PremiumVideoLibrary() {
@@ -62,6 +14,9 @@ export default function PremiumVideoLibrary() {
   const [currentPage, setCurrentPage] = useState(1);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const videosPerPage = 4;
+
+  // Always display the coming soon screen
+  const displayComingSoon = true;
 
   const filteredVideos = selectedCategory === "All" 
     ? videos 
@@ -72,156 +27,119 @@ export default function PremiumVideoLibrary() {
 
   return (
     <LayoutWrapper>
-      <div className="min-h-screen bg-black p-6">
-        <div className="max-w-6xl mx-auto">
-          {/* Page Header */}
-          <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold mb-4">
-              <span className="text-white">Premium </span>
-              <span className="text-[#712f8e]">Video Library</span>
-            </h1>
-            <div className="h-1 w-20 bg-[#712f8e] mx-auto rounded-full mb-6"></div>
-            <p className="text-gray-300 max-w-2xl mx-auto">
-              Browse our collection of high-quality videos available for licensing
-            </p>
-          </div>
-          
-          {/* Main Content Area */}
-          <div className="flex flex-col md:flex-row gap-8">
-            {/* Sidebar - Fixed Category Filter */}
-            <div className="w-full md:w-1/4 md:sticky md:self-start md:top-24" style={{height: 'fit-content'}}>
-              <div className="bg-black/40 rounded-xl border border-gray-800 p-6">
-                {/* Mobile Toggle */}
-                <div className="flex items-center justify-between mb-4 md:hidden">
-                  <h2 className="text-xl font-bold text-white flex items-center">
-                    <Filter className="mr-2 text-[#712f8e] w-5 h-5" /> Filters
-                  </h2>
-                  <button 
-                    onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-                    className="bg-gray-800 p-2 rounded-lg"
-                  >
-                    <Menu className="text-white w-5 h-5" />
-      </button>
-                </div>
-                
-                {/* Desktop Heading */}
-                <h2 className="text-xl font-bold text-white mb-4 hidden md:flex items-center">
-                  <Filter className="mr-2 text-[#712f8e] w-5 h-5" /> Categories
-        </h2>
-                
-                {/* Categories List */}
-                <ul className={`space-y-2 ${isSidebarOpen ? 'block' : 'hidden md:block'}`}>
-          {["All", "Technology", "Nature", "Science"].map((category) => (
-            <li
-              key={category}
-                      onClick={() => { 
-                        setSelectedCategory(category); 
-                        setCurrentPage(1); 
-                        setIsSidebarOpen(false); 
-                      }}
-                      className={`cursor-pointer flex items-center p-3 rounded-lg transition-colors ${
-                        selectedCategory === category 
-                          ? "bg-[#712f8e] text-white" 
-                          : "text-gray-300 hover:bg-[#712f8e]/10"
-                      }`}
-                    >
-                      {selectedCategory === category && <Check className="mr-2 w-4 h-4" />}
-              {category}
-            </li>
-          ))}
-        </ul>
-              </div>
-            </div>
-            
-            {/* Video Grid */}
-            <div className="w-full md:w-3/4">
-              {displayedVideos.length > 0 ? (
-                <>
-                  <div className="grid grid-cols-1 gap-6">
-                    {displayedVideos.map((video) => (
-      <motion.div
-                        key={video.id}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.4 }}
-                        className="bg-black/40 rounded-xl border border-gray-800 overflow-hidden hover:border-[#712f8e]/50 transition-colors"
-                      >
-                        <div className="flex flex-col md:flex-row">
-                          {/* Thumbnail */}
-                          <div className="w-full md:w-2/5 relative">
-                            <div className="aspect-video md:h-full">
-                              <img 
-                                src={video.thumbnail} 
-                                alt={video.title}
-                                className="w-full h-full object-cover"
-                              />
-                              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-60"></div>
-                              <div className="absolute inset-0 flex items-center justify-center">
-                                <div className="w-12 h-12 rounded-full bg-[#712f8e]/80 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
-                                  <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M8 5v14l11-7z" />
-                                  </svg>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          
-                          {/* Content - Removed View Details button */}
-                          <div className="p-6 w-full md:w-3/5">
-                            <h3 className="text-xl font-bold text-white mb-2">{video.title}</h3>
-                            <p className="text-gray-300 mb-4">{video.description}</p>
-                            <div className="flex items-center">
-                              <span className="px-3 py-1 bg-[#712f8e]/20 text-[#712f8e] rounded-full text-xs">
-                                {video.category}
-                              </span>
-              </div>
-              </div>
-            </div>
-                      </motion.div>
-          ))}
+      <div className="min-h-screen relative overflow-hidden px-6 py-20">
+        {/* Background Pattern and Gradients */}
+        <div className="absolute inset-0 bg-black pointer-events-none">
+          <div className="absolute top-0 left-0 w-full h-full bg-[url('/grid-pattern.svg')] bg-center opacity-[0.03]"></div>
+          <div className="absolute top-1/3 right-1/4 w-80 h-80 bg-[#712f8e]/10 rounded-full blur-[120px]"></div>
+          <div className="absolute bottom-1/4 left-1/3 w-60 h-60 bg-[#d601db]/10 rounded-full blur-[100px]"></div>
         </div>
 
-        {/* Pagination */}
-        {totalPages > 1 && (
-                    <div className="flex justify-center items-center mt-10 space-x-2">
-            <button
-                        className={`p-2 rounded-lg ${currentPage === 1 ? "opacity-50 cursor-not-allowed" : "bg-[#712f8e] hover:bg-[#712f8e]/90"}`}
-              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-              disabled={currentPage === 1}
+        <div className="max-w-6xl mx-auto relative z-10">
+          {/* Enhanced Page Header with animations */}
+          <motion.div 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1 }}
+            className="text-center mb-16"
+          >
+            <h1 className="text-5xl font-bold">
+              <span className="text-white">Video </span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#712f8e] to-[#d601db]">Library</span>
+            </h1>
+            <div className="h-1 w-24 bg-gradient-to-r from-[#712f8e] to-[#d601db] mx-auto rounded-full mt-4 mb-6"></div>
+            <p className="text-gray-300 max-w-2xl mx-auto">
+              Explore our curated collection of exceptional videos
+            </p>
+          </motion.div>
+          
+          {/* Main Content Area */}
+          <div className="flex flex-col">
+            {/* Add your creative videos message */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="mb-8 bg-black/40 backdrop-blur-sm border border-[#712f8e]/20 rounded-xl p-5 shadow-lg"
             >
-                        <ChevronLeft className="text-white w-5 h-5" />
-                      </button>
-                      
-                      {Array.from({ length: totalPages }).map((_, index) => (
-                        <button
-                          key={index}
-                          onClick={() => setCurrentPage(index + 1)}
-                          className={`w-8 h-8 rounded-lg ${
-                            currentPage === index + 1
-                              ? "bg-[#712f8e] text-white"
-                              : "bg-gray-800 text-gray-300 hover:bg-gray-700"
-                          }`}
-                        >
-                          {index + 1}
-            </button>
-                      ))}
-                      
-            <button
-                        className={`p-2 rounded-lg ${currentPage === totalPages ? "opacity-50 cursor-not-allowed" : "bg-[#712f8e] hover:bg-[#712f8e]/90"}`}
-              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-              disabled={currentPage === totalPages}
-            >
-                        <ChevronRight className="text-white w-5 h-5" />
-            </button>
-          </div>
-        )}
-                </>
-              ) : (
-                <div className="flex items-center justify-center h-64 bg-black/40 rounded-xl border border-gray-800">
-                  <p className="text-gray-400 text-lg">No videos found. Please try another category.</p>
+              <div className="flex flex-col sm:flex-row items-center gap-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-[#712f8e] to-[#d601db] rounded-full flex items-center justify-center flex-shrink-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                  </svg>
                 </div>
-              )}
-            </div>
+                <div>
+                  <h3 className="text-white font-bold text-lg">Add Your Creative Videos</h3>
+                  <p className="text-gray-300">Share your exceptional content with our global audience and start earning revenue today.</p>
+                </div>
+                <motion.a 
+                  href="/submit-video"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="px-4 py-2 bg-gradient-to-r from-[#712f8e] to-[#d601db] text-white rounded-lg text-sm font-medium shadow-md hover:shadow-lg hover:shadow-[#712f8e]/20 transition-all duration-300 whitespace-nowrap flex-shrink-0"
+                >
+                  Submit Video
+                </motion.a>
+              </div>
+            </motion.div>
+
+            {/* Coming Soon Message */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="flex flex-col items-center justify-center min-h-[50vh] bg-black/60 backdrop-blur-md rounded-xl border border-gray-800 p-12 shadow-xl"
+            >
+              {/* Premium Coming Soon Message */}
+              <motion.div
+                initial={{ scale: 0.9 }}
+                animate={{ scale: 1 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="text-center mb-8"
+              >
+                <h2 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#712f8e] to-[#d601db] mb-5">  <span className="text-white">Coming </span>Soon</h2>
+                <div className="h-1 w-32 bg-gradient-to-r from-[#712f8e] to-[#d601db] mx-auto rounded-full mb-8"></div>
+              </motion.div>
+              
+              <p className="text-white text-xl text-center max-w-2xl mb-6">
+                Be among the first to showcase your creative videos to our global audience.
+              </p>
+              
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="mt-6"
+              >
+                <a 
+                  href="/submit-video" 
+                  className="px-8 py-4 bg-gradient-to-r from-[#712f8e] to-[#d601db] text-white font-semibold rounded-xl shadow-lg shadow-[#712f8e]/20 flex items-center group"
+                >
+                  <span>Submit Your Video</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
+                </a>
+              </motion.div>
+              
+              {/* Animated dots */}
+              <div className="mt-12 flex space-x-3">
+                {[0, 1, 2].map((dot) => (
+                  <motion.div
+                    key={dot}
+                    className="w-3 h-3 bg-[#d601db] rounded-full"
+                    animate={{
+                      y: [0, -10, 0],
+                    }}
+                    transition={{
+                      duration: 1.5,
+                      repeat: Infinity,
+                      repeatType: "loop",
+                      delay: dot * 0.2,
+                    }}
+                  />
+                ))}
+              </div>
+            </motion.div>
           </div>
         </div>
       </div>

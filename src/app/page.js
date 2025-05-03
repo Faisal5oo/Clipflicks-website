@@ -1,5 +1,5 @@
 "use client";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import LayoutWrapper from "../components/Layout/LayoutWrapper";
 // import VideoSlider from "@/components/Slider/VideoSlider";
@@ -8,9 +8,19 @@ import WhyChooseUs from "@/components/Features/FeaturesComponent";
 import VisualShowcase from "@/components/Features/VisualShowCase";
 import TextTransition, { presets } from "react-text-transition";
 import Link from "next/link";
+import { ChevronRight, ChevronDown, Shield, CheckCircle2, Zap, Globe } from "lucide-react";
 
 export default function Home() {
   const [index, setIndex] = useState(0);
+  const heroRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"]
+  });
+  
+  const heroOpacity = useTransform(scrollYProgress, [0, 1], [1, 0]);
+  const heroScale = useTransform(scrollYProgress, [0, 1], [1, 0.8]);
+  const heroBgY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
 
   useEffect(() => {
     const intervalId = setInterval(
@@ -32,93 +42,167 @@ export default function Home() {
     threshold: 0.2,
   });
   const TEXTS = ["Sell Your Videos", "Earn Instantly!", "Get Paid Now!"];
+  
   return (
     <LayoutWrapper>
-      {/* Hero Section */}
-      <div className="relative min-h-screen bg-black flex items-center justify-center">
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute top-0 left-0 w-full h-full object-cover"
+      {/* Premium Hero Section */}
+      <motion.div 
+        ref={heroRef}
+        className="relative min-h-screen flex items-center justify-center overflow-hidden"
+        style={{ opacity: heroOpacity, scale: heroScale }}
+      >
+        {/* Video Background with Parallax */}
+        <motion.div 
+          className="absolute top-0 left-0 w-full h-full"
+          style={{ y: heroBgY }}
         >
-          <source src="/placeholder.mp4" type="video/mp4" />
-        </video>
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="absolute top-0 left-0 w-full h-full object-cover"
+          >
+            <source src="/placeholder.mp4" type="video/mp4" />
+          </video>
 
-        {/* Overlay with brand gradient */}
-        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-black via-black/80 to-[#712f8e]/30"></div>
+          {/* Enhanced gradient overlay */}
+          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-black via-black/80 to-[#712f8e]/30"></div>
+        </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
-          className="relative z-10 text-white max-w-3xl p-8 text-center"
-        >
-          <h1 className="text-5xl md:text-7xl font-bold mb-6">
-            <span className="text-white">Monetize Your </span>
-            <span className="text-[#712f8e]">Creative Videos</span>
-          </h1>
+        {/* Animated particle or flare effect */}
+        <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
+          <div className="absolute top-1/4 right-1/4 w-64 h-64 bg-[#712f8e]/30 rounded-full blur-[100px] animate-pulse"></div>
+          <div className="absolute bottom-1/3 left-1/3 w-80 h-80 bg-[#d601db]/20 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '1s' }}></div>
+        </div>
+
+        {/* Hero Content with enhanced animations */}
+        <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="mb-4"
+          >
+            <span className="inline-block py-1.5 px-4 rounded-full bg-white/10 backdrop-blur-sm text-white text-sm font-medium border border-white/20">
+              Welcome to the Future of Video Monetization
+            </span>
+          </motion.div>
           
-          <p className="text-xl text-gray-200 mt-6 max-w-2xl mx-auto leading-relaxed">
-            Join thousands of creators who earn revenue by sharing their authentic video content with global brands and media companies.
-          </p>
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="text-5xl md:text-7xl font-bold mb-6 leading-tight"
+          >
+            <span className="text-white block mb-2">Turn Your Creative Videos</span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#712f8e] to-[#d601db]">into Income</span>
+          </motion.h1>
+          
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+            className="text-xl md:text-2xl text-gray-200 mt-6 max-w-3xl mx-auto leading-relaxed"
+          >
+            Join thousands of creators who are earning revenue by sharing genuine, high-quality videos with top global brands and media companies.
+          </motion.p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mt-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.8 }}
+            className="flex flex-col sm:flex-row gap-5 justify-center mt-10"
+          >
             <Link href="/submit-video">
-            <motion.button
+              <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 transition={{ duration: 0.2 }}
-                className="px-8 py-4 bg-[#712f8e] text-white font-semibold rounded-lg hover:bg-[#8a3dad] transition-colors"
-            >
-              Submit Your Video
-            </motion.button>
-          </Link>
+                className="px-8 py-4 bg-gradient-to-r from-[#712f8e] to-[#d601db] text-white font-semibold rounded-xl shadow-lg shadow-[#712f8e]/20 flex items-center justify-center group"
+              >
+                <span>Submit Your Video</span>
+                <ChevronRight className="ml-2 group-hover:translate-x-1 transition-transform" />
+              </motion.button>
+            </Link>
             
             <Link href="/about">
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 transition={{ duration: 0.2 }}
-                className="px-8 py-4 bg-black border border-white text-white font-semibold rounded-lg hover:bg-white/10 transition-colors"
+                className="px-8 py-4 bg-black/40 backdrop-blur-sm border border-white/20 text-white font-semibold rounded-xl hover:bg-white/10 transition-colors"
               >
                 Learn More
               </motion.button>
             </Link>
-          </div>
+          </motion.div>
 
-          {/* Trust indicators */}
-          <div className="mt-16">
-            <p className="text-gray-400 uppercase tracking-wider text-sm mb-4">Trusted by creators worldwide</p>
-            <div className="flex flex-wrap justify-center gap-8 items-center">
-              <div className="text-gray-300 font-semibold">20K+ Videos</div>
-              <div className="h-6 w-px bg-gray-700"></div>
-              <div className="text-gray-300 font-semibold">100+ Countries</div>
-              <div className="h-6 w-px bg-gray-700"></div>
-              <div className="text-gray-300 font-semibold">$5M+ Paid</div>
-            </div>
-          </div>
-        </motion.div>
-      </div>
+          {/* Scroll indicator - now centered */}
+          <motion.div 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 1.2 }}
+            className="absolute bottom-10 left-0 right-0 mx-auto flex flex-col items-center cursor-pointer w-40"
+            onClick={() => window.scrollTo({
+              top: window.innerHeight,
+              behavior: 'smooth'
+            })}
+          >
+            <span className="text-gray-400 text-sm mb-2">Scroll to discover</span>
+            <motion.div
+              animate={{ y: [0, 8, 0] }}
+              transition={{ repeat: Infinity, duration: 1.5 }}
+            >
+              <ChevronDown className="text-[#d601db]" />
+            </motion.div>
+          </motion.div>
+        </div>
+      </motion.div>
 
-      {/* Steps Section */}
-      <section className="bg-black py-20 px-6">
-        <div className="max-w-6xl mx-auto">
-          {/* Section Header */}
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4">
+      {/* Steps Section with enhanced visuals */}
+      <section className="bg-black py-24 px-6 relative overflow-hidden">
+        {/* Background effects */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-0 left-0 w-full h-full bg-[url('/grid-pattern.svg')] bg-center opacity-[0.03]"></div>
+          <div className="absolute top-1/3 right-1/4 w-72 h-72 bg-[#712f8e]/10 rounded-full blur-[100px]"></div>
+          <div className="absolute bottom-1/4 left-1/3 w-60 h-60 bg-[#d601db]/10 rounded-full blur-[80px]"></div>
+        </div>
+        
+        <div className="max-w-6xl mx-auto relative">
+          {/* Section Header with animation */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-center mb-20"
+          >
+            <motion.span 
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              viewport={{ once: true }}
+              className="inline-block py-1.5 px-4 rounded-full bg-[#712f8e]/10 text-[#d601db] text-sm font-medium mb-4"
+            >
+              Simple Process
+            </motion.span>
+            
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">
               <span className="text-white">How It </span>
-              <span className="text-[#712f8e]">Works</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#712f8e] to-[#d601db]">Works</span>
             </h2>
-            <div className="h-1 w-20 bg-[#712f8e] mx-auto rounded-full"></div>
-            <p className="text-gray-300 mt-6 max-w-2xl mx-auto">
-              Our simple process helps content creators monetize their videos quickly and efficiently
+            <div className="h-1 w-24 bg-gradient-to-r from-[#712f8e] to-[#d601db] mx-auto rounded-full mb-6"></div>
+            <p className="text-gray-300 mt-6 max-w-2xl mx-auto text-lg">
+              Our streamlined process helps content creators monetize their videos quickly and efficiently
             </p>
-          </div>
+          </motion.div>
 
-          {/* Steps in a modern card layout */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
+          {/* Steps in a premium card layout */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20 relative">
+            {/* Connection line in the background */}
+            <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-gradient-to-r from-[#712f8e] to-[#d601db] hidden md:block transform -translate-y-1/2 opacity-20"></div>
+            
             {[
               {
                 number: "01",
@@ -143,20 +227,41 @@ export default function Home() {
                 key={index}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="bg-black border border-gray-800 rounded-xl p-6 hover:border-[#712f8e] transition-all group"
+                transition={{ duration: 0.5, delay: index * 0.2 }}
+                viewport={{ once: true, margin: "-100px" }}
+                whileHover={{ 
+                  y: -10,
+                  boxShadow: "0 20px 40px -20px rgba(113, 47, 142, 0.3)",
+                }}
+                className="relative bg-gradient-to-b from-gray-900 to-black p-8 rounded-2xl border border-gray-800 hover:border-[#712f8e] transition-all duration-500 group z-10 hover:z-20"
               >
-                <div className="w-12 h-12 flex items-center justify-center bg-[#712f8e]/10 text-[#712f8e] rounded-lg mb-4 text-xl">
+                {/* Step number with 3D effect */}
+                <div className="absolute -top-6 -left-2 w-12 h-12 flex items-center justify-center rounded-full backdrop-blur-md border border-gray-700 bg-black shadow-lg">
+                  <span className="text-[#d601db] font-bold">{step.number}</span>
+                </div>
+                
+                <div className="mb-6 flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-[#712f8e]/20 to-transparent text-3xl">
                   {step.icon}
                 </div>
-                <div className="text-[#712f8e] font-bold text-3xl mb-3 opacity-50">{step.number}</div>
-                <h3 className="text-white text-xl font-semibold mb-3 group-hover:text-[#712f8e] transition-colors">{step.title}</h3>
-                <p className="text-gray-400">{step.description}</p>
+                
+                <h3 className="text-white text-xl font-bold mb-3 group-hover:text-[#d601db] transition-colors duration-300">
+                  {step.title}
+                </h3>
+                <p className="text-gray-400 group-hover:text-gray-300 transition-colors duration-300">
+                  {step.description}
+                </p>
+                
+                {/* Animated arrow for desktop */}
+                {index < 2 && (
+                  <div className="absolute top-1/2 -right-4 transform -translate-y-1/2 hidden md:block text-[#d601db] opacity-0 group-hover:opacity-100 transition-opacity">
+                    <ChevronRight size={24} />
+                  </div>
+                )}
               </motion.div>
             ))}
           </div>
 
-          {/* What Makes ClipsFlick the Best Choice - Modernized with Pexels image */}
+          {/* What Makes ClipsFlick the Best Choice - Enhanced */}
           <motion.div
             ref={step1Ref}
             initial={{ opacity: 0, y: 50 }}
@@ -166,45 +271,179 @@ export default function Home() {
           >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
               <div className="text-white order-2 md:order-1">
-                <h2 className="text-3xl font-bold mb-6">
+                <motion.h2 
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6 }}
+                  viewport={{ once: true }}
+                  className="text-3xl md:text-4xl font-bold mb-6"
+                >
                   <span className="text-white">What Makes ClipsFlick </span>
-                  <span className="text-[#712f8e]">the Best Choice?</span>
-              </h2>
-                <div className="h-1 w-20 bg-[#712f8e] mb-6 rounded-full"></div>
-                <p className="text-gray-300 text-lg leading-relaxed">
-                  We are leading the way in the user-generated content sector, connecting creators and distributors globally. Some of the most shared and copied footage on the internet may be found in our vast video archive.
-                </p>
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#712f8e] to-[#d601db]">the Best Choice?</span>
+                </motion.h2>
                 
-                <div className="mt-8 space-y-4">
+                <div className="h-1 w-24 bg-gradient-to-r from-[#712f8e] to-[#d601db] rounded-full mb-6"></div>
+                
+                <motion.p 
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                  viewport={{ once: true }}
+                  className="text-gray-300 text-lg leading-relaxed"
+                >
+                  We are leading the way in the user-generated content sector, connecting creators and distributors globally. Some of the most shared and recognized footage on the internet is part of our vast video archive.
+                </motion.p>
+                
+                <div className="mt-8 space-y-5">
                   {[
-                    "Global network of media buyers",
-                    "Transparent earnings and payments",
-                    "Advanced copyright protection",
-                    "Dedicated support team"
+                    { text: "Global network of media buyers", icon: <Globe size={20} /> },
+                    { text: "Transparent earnings and payments", icon: <CheckCircle2 size={20} /> },
+                    { text: "Advanced copyright protection", icon: <Shield size={20} /> },
+                    { text: "Dedicated support team", icon: <Zap size={20} /> }
                   ].map((feature, index) => (
-                    <div key={index} className="flex items-start">
-                      <div className="w-6 h-6 rounded-full bg-[#712f8e]/20 flex items-center justify-center mt-1 mr-3 flex-shrink-0">
-                        <svg className="w-4 h-4 text-[#712f8e]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
+                    <motion.div 
+                      key={index}
+                      initial={{ opacity: 0, x: -20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.4, delay: 0.3 + index * 0.1 }}
+                      viewport={{ once: true }}
+                      className="flex items-start group"
+                    >
+                      <div className="mr-4 p-2 rounded-lg bg-[#712f8e]/10 text-[#d601db] group-hover:bg-[#712f8e]/20 transition-colors duration-300">
+                        {feature.icon}
                       </div>
-                      <p className="text-gray-300">{feature}</p>
-                    </div>
+                      <p className="text-gray-300 mt-1 group-hover:text-white transition-colors duration-300">{feature.text}</p>
+                    </motion.div>
                   ))}
                 </div>
               </div>
 
               <div className="md:order-2 relative">
-                <div className="absolute -inset-4 bg-gradient-to-r from-[#712f8e]/20 to-black rounded-xl blur-lg opacity-70"></div>
-                <div className="relative overflow-hidden rounded-xl border border-gray-800">
-                  {/* Using Pexels image */}
+                <div className="absolute -inset-8 bg-gradient-to-r from-[#712f8e]/20 to-black rounded-2xl blur-xl opacity-80"></div>
+                <motion.div 
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.7 }}
+                  viewport={{ once: true }}
+                  className="relative rounded-2xl border border-gray-800 overflow-hidden group"
+                >
+                  {/* Overlay gradient */}
+                  <div className="absolute inset-0 bg-gradient-to-bl from-transparent via-black/40 to-[#712f8e]/30 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  
+                  {/* Image */}
                   <img
                     src="https://images.pexels.com/photos/7256897/pexels-photo-7256897.jpeg" 
                     alt="Video Content Marketing"
-                    className="w-full h-auto rounded-xl hover:scale-105 transition-transform duration-700"
+                    className="w-full h-auto rounded-2xl hover:scale-105 transition-transform duration-700"
                   />
-                </div>
+                </motion.div>
               </div>
+            </div>
+          </motion.div>
+
+          {/* Redesigned premium support cards */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7 }}
+            viewport={{ once: true }}
+            className="mb-20"
+          >
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold">
+                <span className="text-white">Premium </span>
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#712f8e] to-[#d601db]">Support</span>
+              </h2>
+              <div className="h-1 w-20 bg-gradient-to-r from-[#712f8e] to-[#d601db] mx-auto rounded-full mt-4"></div>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {/* Card 1 - 24/7 Support */}
+              <motion.div
+                whileHover={{ y: -10, scale: 1.02 }}
+                className="bg-gradient-to-br from-gray-900 via-black to-[#712f8e]/10 rounded-2xl overflow-hidden border border-gray-800 shadow-xl shadow-black/50 backdrop-blur-sm group"
+              >
+                <div className="relative p-8">
+                  {/* Background glow */}
+                  <div className="absolute top-0 right-0 w-40 h-40 bg-[#712f8e]/20 rounded-full blur-[60px] opacity-60 group-hover:opacity-100 transition-opacity duration-700"></div>
+                  
+                  {/* Icon */}
+                  <div className="w-16 h-16 flex items-center justify-center rounded-xl bg-gradient-to-br from-[#712f8e] to-[#d601db] text-white mb-6 shadow-lg shadow-[#712f8e]/20 group-hover:shadow-[#712f8e]/40 transition-all duration-300">
+                    <Zap size={28} />
+                  </div>
+                  
+                  <h3 className="text-2xl font-bold text-white mb-3 group-hover:text-[#d601db] transition-colors">24/7 Support</h3>
+                  <p className="text-gray-400 group-hover:text-gray-300 transition-colors">Our dedicated team is available around the clock to assist with any questions or issues.</p>
+                  
+                  {/* Hover reveal button */}
+                  <div className="mt-6 transform translate-y-8 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
+                    <Link href="/contact">
+                      <button className="bg-gradient-to-r from-[#712f8e] to-[#d601db] text-white px-6 py-3 rounded-lg flex items-center group">
+                        <span>Contact Us</span>
+                        <ChevronRight className="ml-1 transform group-hover:translate-x-1 transition-transform" />
+                      </button>
+                    </Link>
+                  </div>
+                </div>
+              </motion.div>
+              
+              {/* Card 2 - Expert Guidance */}
+              <motion.div
+                whileHover={{ y: -10, scale: 1.02 }}
+                className="bg-gradient-to-br from-gray-900 via-black to-[#d601db]/10 rounded-2xl overflow-hidden border border-gray-800 shadow-xl shadow-black/50 backdrop-blur-sm group"
+              >
+                <div className="relative p-8">
+                  {/* Background glow */}
+                  <div className="absolute top-0 right-0 w-40 h-40 bg-[#d601db]/20 rounded-full blur-[60px] opacity-60 group-hover:opacity-100 transition-opacity duration-700"></div>
+                  
+                  {/* Icon */}
+                  <div className="w-16 h-16 flex items-center justify-center rounded-xl bg-gradient-to-br from-[#712f8e] to-[#d601db] text-white mb-6 shadow-lg shadow-[#d601db]/20 group-hover:shadow-[#d601db]/40 transition-all duration-300">
+                    <CheckCircle2 size={28} />
+                  </div>
+                  
+                  <h3 className="text-2xl font-bold text-white mb-3 group-hover:text-[#d601db] transition-colors">Expert Guidance</h3>
+                  <p className="text-gray-400 group-hover:text-gray-300 transition-colors">Our industry experts provide personalized guidance to help maximize your video content value.</p>
+                  
+                  {/* Hover reveal button */}
+                  <div className="mt-6 transform translate-y-8 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
+                    <Link href="/about">
+                      <button className="bg-gradient-to-r from-[#712f8e] to-[#d601db] text-white px-6 py-3 rounded-lg flex items-center group">
+                        <span>Learn More</span>
+                        <ChevronRight className="ml-1 transform group-hover:translate-x-1 transition-transform" />
+                      </button>
+                    </Link>
+                  </div>
+                </div>
+              </motion.div>
+              
+              {/* Card 3 - Global Service */}
+              <motion.div
+                whileHover={{ y: -10, scale: 1.02 }}
+                className="bg-gradient-to-br from-gray-900 via-black to-[#712f8e]/10 rounded-2xl overflow-hidden border border-gray-800 shadow-xl shadow-black/50 backdrop-blur-sm group"
+              >
+                <div className="relative p-8">
+                  {/* Background glow */}
+                  <div className="absolute top-0 right-0 w-40 h-40 bg-[#712f8e]/20 rounded-full blur-[60px] opacity-60 group-hover:opacity-100 transition-opacity duration-700"></div>
+                  
+                  {/* Icon */}
+                  <div className="w-16 h-16 flex items-center justify-center rounded-xl bg-gradient-to-br from-[#712f8e] to-[#d601db] text-white mb-6 shadow-lg shadow-[#712f8e]/20 group-hover:shadow-[#712f8e]/40 transition-all duration-300">
+                    <Globe size={28} />
+                  </div>
+                  
+                  <h3 className="text-2xl font-bold text-white mb-3 group-hover:text-[#d601db] transition-colors">Global Service</h3>
+                  <p className="text-gray-400 group-hover:text-gray-300 transition-colors">We serve creators from over 100 countries, providing localized support and international reach.</p>
+                  
+                  {/* Hover reveal button */}
+                  <div className="mt-6 transform translate-y-8 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
+                    <Link href="/video-library">
+                      <button className="bg-gradient-to-r from-[#712f8e] to-[#d601db] text-white px-6 py-3 rounded-lg flex items-center group">
+                        <span>Explore</span>
+                        <ChevronRight className="ml-1 transform group-hover:translate-x-1 transition-transform" />
+                      </button>
+                    </Link>
+                  </div>
+                </div>
+              </motion.div>
             </div>
           </motion.div>
 
@@ -217,174 +456,8 @@ export default function Home() {
           <div>
             <VisualShowcase />
           </div>
-
-          {/* Video section with placeholders instead of YouTube links */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              {
-                title: "Urban Timelapse",
-                category: "City",
-                duration: "0:45",
-                thumbnail: "https://images.pexels.com/photos/3052361/pexels-photo-3052361.jpeg"
-              },
-              {
-                title: "Aerial Sunset",
-                category: "Drone",
-                duration: "1:20",
-                thumbnail: "https://images.pexels.com/photos/1671324/pexels-photo-1671324.jpeg"
-              },
-              {
-                title: "Wildlife Safari",
-                category: "Nature",
-                duration: "2:10",
-                thumbnail: "https://images.pexels.com/photos/750539/pexels-photo-750539.jpeg"
-              },
-              {
-                title: "Mountain Exploration",
-                category: "Adventure",
-                duration: "1:35",
-                thumbnail: "https://images.pexels.com/photos/848573/pexels-photo-848573.jpeg"
-              },
-              {
-                title: "Night City Lights",
-                category: "Urban",
-                duration: "0:55",
-                thumbnail: "https://images.pexels.com/photos/1707820/pexels-photo-1707820.jpeg"
-              },
-              {
-                title: "Ocean Waves",
-                category: "Nature",
-                duration: "1:15",
-                thumbnail: "https://images.pexels.com/photos/1738991/pexels-photo-1738991.jpeg"
-              }
-            ].map((video, index) => (
-          <motion.div
-                key={index}
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.4, delay: index * 0.1 }}
-                className="group relative overflow-hidden rounded-xl cursor-pointer"
-              >
-                <div className="aspect-video overflow-hidden rounded-xl border border-gray-800 group-hover:border-[#712f8e] transition-colors">
-                  <img 
-                    src={video.thumbnail} 
-                    alt={video.title} 
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-80"></div>
-                  
-                  {/* Play button - no link */}
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-14 h-14 rounded-full bg-[#712f8e]/80 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity scale-90 group-hover:scale-100 transition-transform">
-                      <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M8 5v14l11-7z" />
-                      </svg>
-                    </div>
-                  </div>
-                  
-                  {/* Video Info - no YouTube link */}
-                  <div className="absolute bottom-0 left-0 right-0 p-4">
-                    <span className="text-xs font-medium bg-[#712f8e]/90 text-white px-2 py-1 rounded-full">{video.category}</span>
-                    <h3 className="text-white font-medium mt-2 text-lg">{video.title}</h3>
-                    <div className="flex items-center mt-1">
-                      <p className="text-gray-300 text-sm">{video.duration}</p>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-
-          {/* Featured Video - Placeholder instead of YouTube embedded player */}
-          <div className="mt-16 rounded-xl overflow-hidden border border-gray-800">
-            <div className="aspect-video relative bg-black/60">
-              <img 
-                src="https://images.pexels.com/photos/3062541/pexels-photo-3062541.jpeg" 
-                alt="Featured Video" 
-                className="w-full h-full object-cover opacity-70"
-              />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-20 h-20 rounded-full bg-[#712f8e]/90 flex items-center justify-center">
-                  <svg className="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M8 5v14l11-7z" />
-                  </svg>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* CTA Button */}
-          <div className="text-center mt-12">
-            <Link href="/video-library">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="bg-[#712f8e] hover:bg-[#712f8e]/90 text-white font-semibold py-3 px-8 rounded-lg transition-colors"
-              >
-                View All Videos
-              </motion.button>
-            </Link>
-          </div>
         </div>
       </section>
-
-      {/* Testimonials Section with Pexels avatars */}
-      <div className="mt-24">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold mb-4">
-            <span className="text-white">Creator </span>
-            <span className="text-[#712f8e]">Testimonials</span>
-          </h2>
-          <div className="h-1 w-20 bg-[#712f8e] mx-auto rounded-full"></div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {[
-            {
-              quote: "ClipsFlick helped me turn my passion for videography into a profitable venture. Their platform is incredibly easy to use.",
-              name: "Sarah Johnson",
-              role: "Travel Filmmaker",
-              avatar: "https://images.pexels.com/photos/733872/pexels-photo-733872.jpeg"
-            },
-            {
-              quote: "I've been able to reach a global audience and earn consistent revenue thanks to ClipsFlick's extensive network of buyers.",
-              name: "Michael Chen",
-              role: "Drone Specialist",
-              avatar: "https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg"
-            },
-            {
-              quote: "The copyright protection alone is worth it. I finally have peace of mind knowing my creative work is protected and properly monetized.",
-              name: "Emily Rodriguez",
-              role: "Documentary Creator",
-              avatar: "https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg"
-            }
-          ].map((testimonial, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="bg-black border border-gray-800 rounded-xl p-6 hover:border-[#712f8e] transition-all"
-            >
-              <div className="mb-4 text-[#712f8e]">
-                <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
-                </svg>
-              </div>
-              <p className="text-gray-300 mb-6 font-light italic leading-relaxed">"{testimonial.quote}"</p>
-              <div className="flex items-center">
-                <div className="w-12 h-12 rounded-full overflow-hidden mr-4 border-2 border-[#712f8e]">
-                  <img src={testimonial.avatar} alt={testimonial.name} className="w-full h-full object-cover" />
-        </div>
-        <div>
-                  <h4 className="text-white font-semibold">{testimonial.name}</h4>
-                  <p className="text-gray-400 text-sm">{testimonial.role}</p>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </div>
     </LayoutWrapper>
   );
 }
