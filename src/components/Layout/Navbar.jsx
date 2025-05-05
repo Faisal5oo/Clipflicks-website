@@ -26,10 +26,10 @@ export default function Navbar() {
   }, []);
 
   const navLinks = [
-    { name: "Submit a Video", path: "/submit-video" },
-    { name: "Video Library", path: "/video-library" },
-    { name: "Contact Us", path: "/contact" },
-    { name: "About Us", path: "/about" },
+    { name: "Submit Video", path: "/submit-video" },
+    { name: "Videos", path: "/video-library" },
+    { name: "Contact", path: "/contact" },
+    { name: "About", path: "/about" },
     { name: "FAQs", path: "/faqs" },
   ];
 
@@ -49,17 +49,13 @@ export default function Navbar() {
         }`}
       >
         <div className="container mx-auto flex justify-between items-center px-6">
-          {/* Logo with animation - removed the ClipsFlick text */}
+          {/* Logo with animation - simplified */}
           <Link href="/" className="group flex items-center">
             <motion.div 
               whileHover={{ scale: 1.05 }}
               transition={{ type: "spring", stiffness: 400, damping: 10 }}
-              className="relative"
             >
-              <div className="absolute -inset-1 bg-gradient-to-r from-[#712f8e] to-[#d601db] rounded-full opacity-75 blur-sm group-hover:opacity-100 transition duration-300"></div>
-              <div className="relative bg-black rounded-full p-1.5">
-                <img src="/cf-logo.jpg" alt="Logo" className="h-9 w-auto rounded-full" />
-              </div>
+              <img src="/cf-logo.jpg" alt="Logo" className="h-9 w-auto rounded-full" />
             </motion.div>
           </Link>
 
@@ -70,7 +66,7 @@ export default function Navbar() {
                 <motion.li key={item.name} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                   <Link
                     href={item.path}
-                    className={`relative px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
+                    className={`relative px-2 md:px-2 lg:px-4 py-2 rounded-lg text-xs md:text-xs lg:text-sm font-medium transition-all duration-300 ${
                       activeLink === item.path
                         ? "text-white bg-[#712f8e]/20"
                         : "text-gray-300 hover:text-white"
@@ -92,9 +88,9 @@ export default function Navbar() {
               
               {/* CTA Button */}
               <motion.li whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Link href="/submit-video" className="ml-4 px-5 py-2 bg-gradient-to-r from-[#712f8e] to-[#d601db] text-white rounded-lg font-medium flex items-center group">
+                <Link href="/submit-video" className="ml-2 md:ml-2 lg:ml-4 px-3 md:px-3 lg:px-5 py-2 bg-gradient-to-r from-[#712f8e] to-[#d601db] text-white rounded-lg text-xs md:text-xs lg:text-sm font-medium flex items-center group">
                   <span>Start Now</span>
-                  <ChevronRight size={16} className="ml-1 transform group-hover:translate-x-1 transition-transform" />
+                  <ChevronRight size={14} className="ml-1 transform group-hover:translate-x-1 transition-transform" />
                 </Link>
               </motion.li>
             </ul>

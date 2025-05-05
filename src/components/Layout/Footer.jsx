@@ -1,19 +1,20 @@
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
-import { Facebook, Instagram, Twitter, Youtube, ArrowUpRight, Mail, MapPin, Phone } from "lucide-react";
+import { ArrowUpRight, Mail } from "lucide-react";
 import { motion } from "framer-motion";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
-  const [email, setEmail] = useState("");
-  const [subscribeStatus, setSubscribeStatus] = useState(null);
 
+  // Social links commented out as requested
+  /*
   const socialLinks = [
     { icon: <Facebook size={20} />, link: "#", name: "Facebook" },
     { icon: <Instagram size={20} />, link: "#", name: "Instagram" },
     { icon: <Twitter size={20} />, link: "#", name: "Twitter" },
     { icon: <Youtube size={20} />, link: "#", name: "Youtube" },
   ];
+  */
 
   const quickLinks = [
     { name: "Home", path: "/" },
@@ -24,38 +25,6 @@ const Footer = () => {
     { name: "FAQs", path: "/faqs" },
   ];
 
-  const handleSubscribe = (e) => {
-    e.preventDefault();
-    
-    if (!email.trim()) {
-      setSubscribeStatus({
-        success: false,
-        message: "Please enter your email"
-      });
-      return;
-    }
-    
-    if (!/^\S+@\S+\.\S+$/.test(email)) {
-      setSubscribeStatus({
-        success: false,
-        message: "Please enter a valid email"
-      });
-      return;
-    }
-    
-    // Simulate subscription
-    setSubscribeStatus({
-      success: true,
-      message: "Thanks for subscribing! You'll receive updates soon."
-    });
-    
-    // Reset after 3 seconds
-    setTimeout(() => {
-      setSubscribeStatus(null);
-      setEmail("");
-    }, 3000);
-  };
-
   const fadeInUp = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
@@ -63,37 +32,42 @@ const Footer = () => {
 
   return (
     <footer className="relative bg-black text-white pt-20 overflow-hidden">
-      {/* Gradient overlay */}
+      {/* Enhanced gradient overlay */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
         <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-[#712f8e]/10 rounded-full blur-[100px] transform translate-x-1/2 -translate-y-1/2"></div>
         <div className="absolute bottom-0 left-0 w-1/4 h-1/4 bg-[#d601db]/10 rounded-full blur-[100px] transform -translate-x-1/2 translate-y-1/2"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-40 h-40 bg-[#712f8e]/15 rounded-full blur-[80px]"></div>
       </div>
 
       <div className="container mx-auto px-6 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 pb-12 border-b border-gray-800">
-          {/* Brand Section */}
+        {/* Premium Divider */}
+        <div className="w-full h-px bg-gradient-to-r from-transparent via-[#712f8e]/50 to-transparent mb-16"></div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 pb-12">
+          {/* Brand Section - Enhanced */}
           <motion.div 
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={fadeInUp}
-            className="lg:col-span-4"
+            className="lg:col-span-5"
           >
             <Link href="/" className="inline-block mb-6 group">
               <div className="flex items-center">
                 <div className="relative">
-                  <div className="absolute -inset-1 bg-gradient-to-r from-[#712f8e] to-[#d601db] rounded-full opacity-75 blur-sm group-hover:opacity-100 transition duration-300"></div>
-                  <div className="relative bg-black rounded-full p-1">
-                    <img src="/cf-logo.jpg" alt="ClipsFlick Logo" className="h-10 w-auto rounded-full" />
-                  </div>
+                  <img src="/cf-logo.jpg" alt="ClipsFlick Logo" className="h-12 w-auto rounded-full shadow-lg shadow-[#712f8e]/20" />
                 </div>
               </div>
             </Link>
             
-            <p className="text-gray-400 mb-6 leading-relaxed">
-              We help content creators monetize their videos by connecting them with global brands and media companies. Your creative vision, our global reach.
-            </p>
+            <div className="p-6 bg-gradient-to-br from-black to-[#712f8e]/5 rounded-xl border border-[#712f8e]/10 mb-6">
+              <p className="text-gray-300 leading-relaxed">
+                Transform your passion for video creation into a sustainable income stream. Connect with us today to explore monetization opportunities.
+              </p>
+            </div>
             
+            {/* Social links section commented out as requested */}
+            {/*
             <div className="flex space-x-3">
               {socialLinks.map((social, index) => (
                 <motion.a
@@ -108,36 +82,37 @@ const Footer = () => {
                 </motion.a>
               ))}
             </div>
+            */}
           </motion.div>
           
-          {/* Quick Links */}
+          {/* Quick Links - Enhanced */}
           <motion.div 
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={fadeInUp}
-            className="lg:col-span-2"
+            className="lg:col-span-4"
           >
-            <h3 className="font-bold text-lg mb-4 text-white relative inline-block">
+            <h3 className="font-bold text-xl mb-6 text-white relative inline-block">
               Quick Links
               <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-[#712f8e] to-[#d601db] rounded-full"></div>
             </h3>
-            <ul className="space-y-3">
+            <ul className="grid grid-cols-2 gap-4">
               {quickLinks.map((link, index) => (
                 <li key={index}>
-                  <Link 
+                  <Link
                     href={link.path}
-                    className="text-gray-400 hover:text-white transition-colors flex items-center group"
+                    className="text-gray-400 hover:text-white transition-colors flex items-center group bg-black/40 p-3 rounded-lg hover:bg-[#712f8e]/10 border border-transparent hover:border-[#712f8e]/20"
                   >
                     <span>{link.name}</span>
-                    <ArrowUpRight size={14} className="ml-1 opacity-0 group-hover:opacity-100 transform group-hover:translate-x-1 transition-all" />
+                    <ArrowUpRight size={14} className="ml-1 opacity-0 group-hover:opacity-100 transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />
                   </Link>
                 </li>
               ))}
             </ul>
           </motion.div>
           
-          {/* Contact Info */}
+          {/* Contact Info - Enhanced */}
           <motion.div 
             initial="hidden"
             whileInView="visible"
@@ -145,84 +120,34 @@ const Footer = () => {
             variants={fadeInUp}
             className="lg:col-span-3"
           >
-            <h3 className="font-bold text-lg mb-4 text-white relative inline-block">
+            <h3 className="font-bold text-xl mb-6 text-white relative inline-block">
               Contact Us
               <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-[#712f8e] to-[#d601db] rounded-full"></div>
             </h3>
-            <ul className="space-y-4">
-              <li className="flex items-start">
-                <Mail className="text-[#712f8e] mt-1 mr-3 flex-shrink-0" size={18} />
+            <div className="bg-gradient-to-br from-[#712f8e]/10 to-black p-6 rounded-xl border border-[#712f8e]/20 hover:border-[#712f8e]/30 transition-colors">
+              <div className="flex items-start mb-2">
+                <Mail className="text-[#d601db] mt-1 mr-3 flex-shrink-0" size={18} />
                 <div>
-                  <p className="text-gray-300 mb-1">Email Us</p>
-                  <a href="mailto:clipsflickofficial@gmail.com" className="text-gray-400 hover:text-white transition-colors">
+                  <p className="text-white mb-1 font-medium">Email Us</p>
+                  <a 
+                    href="mailto:clipsflickofficial@gmail.com" 
+                    className="text-gray-400 hover:text-[#d601db] transition-colors inline-flex items-center group"
+                  >
                     clipsflickofficial@gmail.com
+                    <ArrowUpRight size={14} className="ml-1 opacity-0 group-hover:opacity-100 transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />
                   </a>
                 </div>
-              </li>
-              <li className="flex items-start">
-                <MapPin className="text-[#712f8e] mt-1 mr-3 flex-shrink-0" size={18} />
-                <div>
-                  <p className="text-gray-300 mb-1">Global Reach</p>
-                  <p className="text-gray-400">Serving creators worldwide</p>
-                </div>
-              </li>
-            </ul>
-          </motion.div>
-          
-          {/* Newsletter with subscription confirmation */}
-          <motion.div 
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={fadeInUp}
-            className="lg:col-span-3"
-          >
-            <h3 className="font-bold text-lg mb-4 text-white relative inline-block">
-              Stay Updated
-              <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-[#712f8e] to-[#d601db] rounded-full"></div>
-            </h3>
-            <p className="text-gray-400 mb-4">
-              Join our newsletter for updates on new features and opportunities.
-            </p>
-            <form onSubmit={handleSubscribe} className="flex flex-col space-y-2">
-              <div className="flex">
-                <input 
-                  type="email" 
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Your email" 
-                  className="bg-gray-900 border border-gray-800 rounded-l-lg py-2 px-3 text-gray-300 focus:outline-none focus:ring-1 focus:ring-[#712f8e] w-full"
-                />
-                <motion.button
-                  type="submit"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="bg-gradient-to-r from-[#712f8e] to-[#d601db] text-white py-2 px-4 rounded-r-lg font-medium"
-                >
-                  Subscribe
-                </motion.button>
               </div>
-              
-              {/* Subscription status message */}
-              {subscribeStatus && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className={`text-sm px-3 py-2 rounded-md ${
-                    subscribeStatus.success 
-                      ? "bg-green-900/30 text-green-400 border border-green-900" 
-                      : "bg-red-900/30 text-red-400 border border-red-900"
-                  }`}
-                >
-                  {subscribeStatus.message}
-                </motion.div>
-              )}
-            </form>
+              <p className="text-gray-500 text-sm mt-4">We typically respond to inquiries within 24-48 hours.</p>
+            </div>
           </motion.div>
         </div>
         
-        {/* Bottom Bar */}
-        <div className="py-6 flex flex-col md:flex-row justify-between items-center">
+        {/* Premium Divider */}
+        <div className="w-full h-px bg-gradient-to-r from-transparent via-[#712f8e]/30 to-transparent mt-6"></div>
+        
+        {/* Bottom Bar - Enhanced */}
+        <div className="py-8 text-center">
           <motion.p 
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -231,23 +156,6 @@ const Footer = () => {
           >
             © {currentYear} ClipsFlick. All rights reserved.
           </motion.p>
-          
-          <motion.div 
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-            className="flex space-x-6 mt-4 md:mt-0"
-          >
-            <Link href="/privacy" className="text-gray-500 hover:text-white text-sm transition-colors">
-              Privacy Policy
-            </Link>
-            <Link href="/terms" className="text-gray-500 hover:text-white text-sm transition-colors">
-              Terms of Service
-            </Link>
-            <Link href="/cookie-policy" className="text-gray-500 hover:text-white text-sm transition-colors">
-              Cookie Policy
-            </Link>
-          </motion.div>
         </div>
       </div>
     </footer>

@@ -440,14 +440,16 @@ export default function VideoSubmissionForm() {
           transition={{ duration: 1 }}
           className="absolute top-32 md:top-28 left-0 right-0 text-center z-10"
         >
-          <h1 className="text-4xl md:text-5xl font-bold">
+          <motion.h1
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1 }}
+            className="text-4xl md:text-5xl font-bold"
+          >
             <span className="text-white">Submit Your </span>
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#712f8e] to-[#d601db]">Creative Video</span>
-          </h1>
+          </motion.h1>
           <div className="h-1 w-24 bg-gradient-to-r from-[#712f8e] to-[#d601db] mx-auto rounded-full mt-4"></div>
-          {/* <p className="text-gray-300 max-w-xl mx-auto mt-6">
-            Share your creative content with our global network of media buyers and start earning revenue
-          </p> */}
         </motion.div>
 
         {/* Premium Animated Form Container */}
@@ -469,7 +471,7 @@ export default function VideoSubmissionForm() {
             
             {/* Video URL */}
             <div>
-              <label className="text-white font-medium">Video Title *</label>
+              <label className="text-white font-medium">Video Title and Description *</label>
               <div className="relative mt-2 group">
                 <input
                   type="text"

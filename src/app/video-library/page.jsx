@@ -9,26 +9,13 @@ const videos = [
   
 ];
 
-export default function PremiumVideoLibrary() {
-  const [selectedCategory, setSelectedCategory] = useState("All");
+export default function VideoLibrary() {
   const [currentPage, setCurrentPage] = useState(1);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const videosPerPage = 4;
-
-  // Always display the coming soon screen
-  const displayComingSoon = true;
-
-  const filteredVideos = selectedCategory === "All" 
-    ? videos 
-    : videos.filter(video => video.category === selectedCategory);
-    
-  const totalPages = Math.ceil(filteredVideos.length / videosPerPage);
-  const displayedVideos = filteredVideos.slice((currentPage - 1) * videosPerPage, currentPage * videosPerPage);
 
   return (
     <LayoutWrapper>
       <div className="min-h-screen relative overflow-hidden px-6 py-20">
-        {/* Background Pattern and Gradients */}
+        {/* Background - changed to solid black with subtle pattern */}
         <div className="absolute inset-0 bg-black pointer-events-none">
           <div className="absolute top-0 left-0 w-full h-full bg-[url('/grid-pattern.svg')] bg-center opacity-[0.03]"></div>
           <div className="absolute top-1/3 right-1/4 w-80 h-80 bg-[#712f8e]/10 rounded-full blur-[120px]"></div>
@@ -83,26 +70,28 @@ export default function PremiumVideoLibrary() {
               </div>
             </motion.div>
 
-            {/* Coming Soon Message */}
+            {/* Coming Soon Message - Enhanced */}
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="flex flex-col items-center justify-center min-h-[50vh] bg-black/60 backdrop-blur-md rounded-xl border border-gray-800 p-12 shadow-xl"
+              className="flex flex-col items-center justify-center min-h-[60vh] bg-black/60 backdrop-blur-md rounded-xl border border-gray-800 p-12 shadow-xl"
             >
-              {/* Premium Coming Soon Message */}
               <motion.div
                 initial={{ scale: 0.9 }}
                 animate={{ scale: 1 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
                 className="text-center mb-8"
               >
-                <h2 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#712f8e] to-[#d601db] mb-5">  <span className="text-white">Coming </span>Soon</h2>
+                <h2 className="text-4xl md:text-5xl font-extrabold mb-5">
+                  <span className="text-white">Video </span>
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#712f8e] to-[#d601db]">Gallery</span>
+                </h2>
                 <div className="h-1 w-32 bg-gradient-to-r from-[#712f8e] to-[#d601db] mx-auto rounded-full mb-8"></div>
               </motion.div>
               
               <p className="text-white text-xl text-center max-w-2xl mb-6">
-                Be among the first to showcase your creative videos to our global audience.
+                Our exclusive video gallery is currently being prepared with premium content.
               </p>
               
               <motion.div
@@ -120,25 +109,6 @@ export default function PremiumVideoLibrary() {
                   </svg>
                 </a>
               </motion.div>
-              
-              {/* Animated dots */}
-              <div className="mt-12 flex space-x-3">
-                {[0, 1, 2].map((dot) => (
-                  <motion.div
-                    key={dot}
-                    className="w-3 h-3 bg-[#d601db] rounded-full"
-                    animate={{
-                      y: [0, -10, 0],
-                    }}
-                    transition={{
-                      duration: 1.5,
-                      repeat: Infinity,
-                      repeatType: "loop",
-                      delay: dot * 0.2,
-                    }}
-                  />
-                ))}
-              </div>
             </motion.div>
           </div>
         </div>

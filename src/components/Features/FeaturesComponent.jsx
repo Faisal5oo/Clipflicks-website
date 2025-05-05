@@ -6,32 +6,32 @@ export default function WhyChooseUs() {
   const features = [
     {
       icon: <Globe size={28} />,
-      title: "Global Network",
+              title: "Global Network",
       description: "Connect seamlessly with trusted media buyers and content distributors worldwide."
-    },
-    {
+            },
+            {
       icon: <DollarSign size={28} />,
-      title: "Fair Compensation",
+              title: "Fair Compensation",
       description: "Receive fair and transparent payment for the true value of your content."
-    },
-    {
+            },
+            {
       icon: <ShieldCheck size={28} />,
-      title: "Copyright Protection",
+              title: "Copyright Protection",
       description: "Safeguard your rights — we actively protect your content across all major digital platforms."
-    },
-    {
+            },
+            {
       icon: <Zap size={28} />,
-      title: "Quick Payments",
+              title: "Quick Payments",
       description: "Get paid faster with our streamlined and reliable payment system."
-    },
-    {
+            },
+            {
       icon: <Upload size={28} />,
-      title: "Easy Submission",
+              title: "Easy Submission",
       description: "Use our simple, user-friendly platform to submit your videos effortlessly."
-    },
-    {
+            },
+            {
       icon: <Headset size={28} />,
-      title: "Dedicated Support",
+              title: "Dedicated Support",
       description: "Our expert team is available to assist and guide you throughout every step of the process."
     }
   ];

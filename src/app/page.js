@@ -267,7 +267,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 50 }}
             animate={step1InView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 1 }}
-            className="mb-24"
+            className="mb-24 hidden lg:block"
           >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
               <div className="text-white order-2 md:order-1">
@@ -318,24 +318,29 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="md:order-2 relative">
+              <div className="md:order-2 relative hidden md:block">
                 <div className="absolute -inset-8 bg-gradient-to-r from-[#712f8e]/20 to-black rounded-2xl blur-xl opacity-80"></div>
                 <motion.div 
                   initial={{ opacity: 0, scale: 0.9 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.7 }}
                   viewport={{ once: true }}
-                  className="relative rounded-2xl border border-gray-800 overflow-hidden group"
+                  className="relative rounded-2xl border border-gray-800 overflow-hidden group h-full flex flex-col justify-center p-6 bg-black"
                 >
-                  {/* Overlay gradient */}
-                  <div className="absolute inset-0 bg-gradient-to-bl from-transparent via-black/40 to-[#712f8e]/30 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  <div className="absolute inset-0 bg-gradient-to-bl from-transparent via-black/40 to-[#712f8e]/30 z-0"></div>
                   
-                  {/* Image */}
-                  <img
-                    src="https://images.pexels.com/photos/7256897/pexels-photo-7256897.jpeg" 
-                    alt="Video Content Marketing"
-                    className="w-full h-auto rounded-2xl hover:scale-105 transition-transform duration-700"
-                  />
+                  <div className="relative z-10 text-center">
+                    <span className="text-5xl text-[#d601db] mb-4 inline-block">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                        <path d="M6.271 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .271-.445z"/>
+                      </svg>
+                    </span>
+                    <h3 className="text-2xl font-bold text-white mb-4">Monetize Your Creativity</h3>
+                    <div className="bg-gradient-to-r from-[#712f8e]/10 to-transparent p-4 rounded-lg border border-[#712f8e]/20">
+                      <p className="text-white">Share your creative vision with our global audience and turn your talent into opportunity.</p>
+                    </div>
+                  </div>
                 </motion.div>
               </div>
             </div>

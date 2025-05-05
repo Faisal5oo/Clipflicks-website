@@ -147,7 +147,7 @@ export default function AboutUs() {
                 </motion.div>
               </motion.div>
               
-              <motion.div 
+              {/* <motion.div 
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 1, delay: 0.5 }}
@@ -163,7 +163,7 @@ export default function AboutUs() {
                     className="rounded-2xl object-cover hover:scale-105 transition-transform duration-700"
                   />
                 </div>
-              </motion.div>
+              </motion.div> */}
             </div>
           </div>
           

@@ -468,7 +468,7 @@ export default function VideoSubmissionForm() {
             
             {/* Retaining Video Title and URL fields */}
             <div>
-              <label className="text-white font-medium">Video Title *</label>
+              <label className="text-white font-medium">Video Title and Description *</label>
               <div className="relative mt-2">
                 <input
                   type="text"
