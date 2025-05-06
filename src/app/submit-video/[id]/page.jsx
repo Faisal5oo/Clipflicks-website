@@ -469,6 +469,7 @@ export default function VideoSubmissionForm() {
             {/* Retaining Video Title and URL fields */}
             <div>
               <label className="text-white font-medium">Video Title and Description *</label>
+              {/* <p className="text-gray-400 text-sm mt-1">Please provide a title and description for your video. This will help us understand your video and its content.</p> */}
               <div className="relative mt-2">
                 <input
                   type="text"
