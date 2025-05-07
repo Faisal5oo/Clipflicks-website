@@ -60,11 +60,11 @@ const Footer = () => {
               </div>
             </Link>
             
-            <div className="p-6 bg-gradient-to-br from-black to-[#712f8e]/5 rounded-xl border border-[#712f8e]/10 mb-6">
+            {/* <div className="p-6 bg-gradient-to-br from-black to-[#712f8e]/5 rounded-xl border border-[#712f8e]/10 mb-6">
               <p className="text-gray-300 leading-relaxed">
                 Transform your passion for video creation into a sustainable income stream. Connect with us today to explore monetization opportunities.
               </p>
-            </div>
+            </div> */}
             
             {/* Social links section commented out as requested */}
             {/*
