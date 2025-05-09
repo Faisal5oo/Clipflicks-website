@@ -13,6 +13,7 @@ import { v4 as uuidv4 } from "uuid";
 
 export default function VideoSubmissionForm() {
   const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
   const [videoURL, setVideoURL] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -332,6 +333,9 @@ export default function VideoSubmissionForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Prevent double submission
+    if (loading) return;
+
     if (!agreed18 || !agreedTerms || !exclusiveRights) {
       alert("Please agree to all required checkboxes.");
       return;
@@ -354,6 +358,7 @@ export default function VideoSubmissionForm() {
       const formData = {
         empRef: id,
         title,
+        description,
         videoURL,
         firstName,
         lastName,
@@ -367,8 +372,8 @@ export default function VideoSubmissionForm() {
         agreedTerms,
         exclusiveRights,
         signature: signatureImage,
-        recordedBy, // New Q1
-        submittedElsewhere, // New Q2
+        recordedBy,
+        submittedElsewhere,
         otherCompanyName: submittedElsewhere === "Yes" ? otherCompanyName : "",
       };
 
@@ -389,6 +394,7 @@ export default function VideoSubmissionForm() {
 
       // Clear form fields after submission
       setTitle("");
+      setDescription("");
       setVideoURL("");
       setFirstName("");
       setLastName("");
@@ -406,7 +412,7 @@ export default function VideoSubmissionForm() {
       setAgreedTerms(false);
       setExclusiveRights(false);
 
-      // Clear signature pad after submission
+      // Clear signature pad
       if (signRef.current) signRef.current.clear();
     } catch (err) {
       console.error("Submission error:", err);
@@ -466,10 +472,9 @@ export default function VideoSubmissionForm() {
               <div className="h-1 w-20 bg-[#712f8e] mt-2 rounded-full"></div>
             </div>
             
-            {/* Retaining Video Title and URL fields */}
+            {/* Video Title and Description fields */}
             <div>
-              <label className="text-white font-medium">Video Title and Description *</label>
-              {/* <p className="text-gray-400 text-sm mt-1">Please provide a title and description for your video. This will help us understand your video and its content.</p> */}
+              <label className="text-white font-medium">Video Title *</label>
               <div className="relative mt-2">
                 <input
                   type="text"
@@ -481,17 +486,16 @@ export default function VideoSubmissionForm() {
                 />
               </div>
             </div>
-            
+
             <div>
-              <label className="text-white font-medium">Video URL *</label>
+              <label className="text-white font-medium">Video Description *</label>
               <div className="relative mt-2">
-                <input
-                  type="text"
+                <textarea
                   required
-                  value={videoURL}
-                  onChange={(e) => setVideoURL(e.target.value)}
-                  placeholder="Paste your video link"
-                  className="w-full p-3 bg-black/60 text-white rounded-lg outline-none border border-gray-700 focus:border-[#712f8e] transition-colors"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  placeholder="Enter your video description"
+                  className="w-full p-3 bg-black/60 text-white rounded-lg outline-none border border-gray-700 focus:border-[#712f8e] transition-colors min-h-[100px] resize-y"
                 />
               </div>
             </div>
@@ -772,8 +776,14 @@ export default function VideoSubmissionForm() {
                   penColor="black"
                   canvasProps={{
                     width: 800,
-                    height: 200,
-                    className: "rounded-lg sigCanvas",
+                    height: 300,
+                    className: "rounded-lg sigCanvas mx-auto",
+                    style: {
+                      width: '100%',
+                      height: '300px',
+                      maxWidth: '800px',
+                      margin: '0 auto'
+                    }
                   }}
                 />
               </div>

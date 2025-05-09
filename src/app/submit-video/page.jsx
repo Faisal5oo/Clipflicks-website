@@ -13,6 +13,7 @@ import { v4 as uuidv4 } from "uuid";
 
 export default function VideoSubmissionForm() {
   const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
   const [videoURL, setVideoURL] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -332,6 +333,9 @@ export default function VideoSubmissionForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Prevent double submission
+    if (loading) return;
+
     if (!agreed18 || !agreedTerms || !exclusiveRights) {
       alert("Please agree to all required checkboxes.");
       return;
@@ -354,6 +358,7 @@ export default function VideoSubmissionForm() {
       const formData = {
         empRef: null,
         title,
+        description,
         videoURL,
         firstName,
         lastName,
@@ -367,8 +372,8 @@ export default function VideoSubmissionForm() {
         agreedTerms,
         exclusiveRights,
         signature: signatureImage,
-        recordedBy, // New Q1
-        submittedElsewhere, // New Q2
+        recordedBy,
+        submittedElsewhere,
         otherCompanyName: submittedElsewhere === "Yes" ? otherCompanyName : "",
       };
 
@@ -389,6 +394,7 @@ export default function VideoSubmissionForm() {
 
       // Clear form fields after submission
       setTitle("");
+      setDescription("");
       setVideoURL("");
       setFirstName("");
       setLastName("");
@@ -469,33 +475,45 @@ export default function VideoSubmissionForm() {
               <p className="text-gray-400 mt-2">Fill out the details below to submit your video</p>
             </div>
             
-            {/* Video URL */}
+            {/* Video Title and Description fields */}
             <div>
-              <label className="text-white font-medium">Video Title and Description *</label>
-              <div className="relative mt-2 group">
+              <label className="text-white font-medium">Video Title *</label>
+              <div className="relative mt-2">
                 <input
                   type="text"
                   required
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="Enter your video title"
-                  className="w-full p-3 pl-4 bg-gray-900/60 text-white rounded-lg outline-none border border-gray-700 focus:border-[#712f8e] transition-colors group-hover:border-gray-600"
+                  className="w-full p-3 bg-black/60 text-white rounded-lg outline-none border border-gray-700 focus:border-[#712f8e] transition-colors"
                 />
-                <div className="absolute bottom-0 left-0 h-0.5 w-0 bg-gradient-to-r from-[#712f8e] to-[#d601db] group-hover:w-full transition-all duration-300"></div>
               </div>
             </div>
+
+            <div>
+              <label className="text-white font-medium">Video Description *</label>
+              <div className="relative mt-2">
+                <textarea
+                  required
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  placeholder="Enter your video description"
+                  className="w-full p-3 bg-black/60 text-white rounded-lg outline-none border border-gray-700 focus:border-[#712f8e] transition-colors min-h-[100px] resize-y"
+                />
+              </div>
+            </div>
+
             <div>
               <label className="text-white font-medium">Video URL *</label>
-              <div className="relative mt-2 group">
+              <div className="relative mt-2">
                 <input
                   type="text"
                   required
                   value={videoURL}
                   onChange={(e) => setVideoURL(e.target.value)}
                   placeholder="Paste your video link"
-                  className="w-full p-3 pl-4 bg-gray-900/60 text-white rounded-lg outline-none border border-gray-700 focus:border-[#712f8e] transition-colors group-hover:border-gray-600"
+                  className="w-full p-3 bg-black/60 text-white rounded-lg outline-none border border-gray-700 focus:border-[#712f8e] transition-colors"
                 />
-                <div className="absolute bottom-0 left-0 h-0.5 w-0 bg-gradient-to-r from-[#712f8e] to-[#d601db] group-hover:w-full transition-all duration-300"></div>
               </div>
             </div>
 
@@ -824,30 +842,33 @@ export default function VideoSubmissionForm() {
               </motion.label>
             </div>
             
-            {/* Enhanced signature section */}
+            {/* Signature Section with improved styling */}
             <div>
               <label className="text-white font-medium mb-2 block">Signature *</label>
-              <div className="mt-2 bg-white rounded-lg p-3 border border-gray-300 relative overflow-hidden">
-                <div className="absolute inset-0 bg-gray-50 opacity-50"></div>
+              <div className="mt-2 bg-white rounded-lg p-3 border border-gray-300">
                 <SignatureCanvas
                   ref={signRef}
                   penColor="black"
                   canvasProps={{
                     width: 800,
-                    height: 200,
-                    className: "rounded-lg sigCanvas relative z-10",
+                    height: 300,
+                    className: "rounded-lg sigCanvas mx-auto",
+                    style: {
+                      width: '100%',
+                      height: '300px',
+                      maxWidth: '800px',
+                      margin: '0 auto'
+                    }
                   }}
                 />
               </div>
-              <motion.button
+              <button
                 type="button"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="mt-3 px-4 py-2 bg-gray-900 text-white rounded-lg border border-gray-700 hover:bg-gray-800 transition-colors"
+                className="mt-3 px-4 py-2 bg-black text-white rounded-lg border border-gray-700 hover:bg-gray-900 transition-colors"
                 onClick={handleClear}
               >
                 Clear Signature
-              </motion.button>
+              </button>
             </div>
 
             {/* Enhanced submit button */}
