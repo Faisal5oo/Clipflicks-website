@@ -134,10 +134,10 @@ export default function ContactUs() {
                   <p className="text-gray-400 mb-4">Our team will respond to your inquiry as soon as possible</p>
                   
                   <a 
-                    href="mailto:clipsflickofficial@gmail.com" 
+                    href="mailto:Support@clipsflick.com" 
                     className="text-lg text-white font-medium flex items-center group/link hover:text-[#d601db] transition-colors"
                   >
-                    clipsflickofficial@gmail.com
+                    Support@clipsflick.com
                     <ArrowUpRight size={16} className="ml-2 opacity-0 group-hover/link:opacity-100 transform group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-all" />
                   </a>
                 </div>

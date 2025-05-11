@@ -358,8 +358,8 @@ export default function AboutUs() {
               </div>
               <div className="text-left">
                 <p className="text-gray-400 text-sm mb-1">Email Us At</p>
-                <a href="mailto:clipsflickofficial@gmail.com" className="text-white text-xl font-medium hover:text-[#d601db] transition-colors">
-                  clipsflickofficial@gmail.com
+                <a href="mailto:Support@clipsflick.com" className="text-white text-xl font-medium hover:text-[#d601db] transition-colors">
+                Support@clipsflick.com
                 </a>
               </div>
             </motion.div>

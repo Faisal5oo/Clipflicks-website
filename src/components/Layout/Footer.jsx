@@ -130,10 +130,10 @@ const Footer = () => {
                 <div>
                   <p className="text-white mb-1 font-medium">Email Us</p>
                   <a 
-                    href="mailto:clipsflickofficial@gmail.com" 
+                    href="mailto:Support@clipsflick.com" 
                     className="text-gray-400 hover:text-[#d601db] transition-colors inline-flex items-center group"
                   >
-                    clipsflickofficial@gmail.com
+                    Support@clipsflick.com
                     <ArrowUpRight size={14} className="ml-1 opacity-0 group-hover:opacity-100 transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />
                   </a>
                 </div>
