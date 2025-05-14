@@ -781,34 +781,33 @@ export default function VideoSubmissionForm() {
 
             {/* Signature Section with improved styling */}
             <div>
-              <label className="text-white font-medium mb-2 block">Signature *</label>
-              <div className="mt-2 bg-white rounded-lg p-3 border border-gray-300 flex justify-center">
-                <SignatureCanvas
-                  ref={signRef}
-                  penColor="black"
-                  canvasProps={{
-                    width: 800,
-                    height: 300,
-                    className: "rounded-lg sigCanvas",
-                    style: {
-                      width: '100%',
-                      maxWidth: '100%', // allows responsiveness
-                      height: '300px',
-                      maxHeight: '300px',
-                      display: 'block',
-                    }
-                  }}
-                />
-              </div>
+  <label className="text-white font-medium mb-2 block">Signature *</label>
 
-              <button
-                type="button"
-                className="mt-3 px-4 py-2 bg-black text-white rounded-lg border border-gray-700 hover:bg-gray-900 transition-colors"
-                onClick={handleClear}
-              >
-                Clear Signature
-              </button>
-            </div>
+  <div className="mt-2 bg-white rounded-lg p-3 border border-gray-300 flex justify-center">
+    <SignatureCanvas
+      ref={signRef}
+      penColor="black"
+      canvasProps={{
+        className: "rounded-lg sigCanvas w-full max-w-[100%] h-[300px] touch-manipulation",
+        style: {
+          display: 'block',
+          backgroundColor: 'white',
+          borderRadius: '8px',
+          width: '100%',
+          height: '300px',
+        },
+      }}
+    />
+  </div>
+
+  <button
+    type="button"
+    className="mt-3 px-4 py-2 bg-black text-white rounded-lg border border-gray-700 hover:bg-gray-900 transition-colors"
+    onClick={handleClear}
+  >
+    Clear Signature
+  </button>
+</div>
 
             {/* Submit button with brand color */}
             <motion.button
