@@ -302,7 +302,6 @@ export default function VideoSubmissionForm() {
         xhr.addEventListener("load", () => {
           if (xhr.status >= 200 && xhr.status < 300) {
             console.log("✅ Upload successful!");
-            console.log("📽️ Video URL:", publicUrl);
             resolve(publicUrl);
           } else {
             console.error("❌ Upload failed");
@@ -496,6 +495,20 @@ export default function VideoSubmissionForm() {
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="Enter your video description"
                   className="w-full p-3 bg-black/60 text-white rounded-lg outline-none border border-gray-700 focus:border-[#712f8e] transition-colors min-h-[100px] resize-y"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="text-white font-medium">Video URL *</label>
+              <div className="relative mt-2">
+                <input
+                  type="text"
+                  required
+                  value={videoURL}
+                  onChange={(e) => setVideoURL(e.target.value)}
+                  placeholder="Paste your video link"
+                  className="w-full p-3 bg-black/60 text-white rounded-lg outline-none border border-gray-700 focus:border-[#712f8e] transition-colors"
                 />
               </div>
             </div>
