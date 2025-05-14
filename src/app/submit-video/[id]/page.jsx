@@ -285,41 +285,41 @@ export default function VideoSubmissionForm() {
     try {
       setUploading(true);
       setUploadProgress(0);
-      
-    const res = await fetch("https://clipflicks-admin-fe.vercel.app/api/upload-url");
-    const { uploadUrl, publicUrl } = await res.json();
+
+      const res = await fetch("https://clipflicks-admin-fe.vercel.app/api/upload-url");
+      const { uploadUrl, publicUrl } = await res.json();
 
       return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
-        
+
         xhr.upload.addEventListener("progress", (event) => {
-          if (event.lengthComputable) { 
+          if (event.lengthComputable) {
             const percentCompleted = Math.round((event.loaded * 100) / event.total);
             setUploadProgress(percentCompleted);
           }
         });
-        
+
         xhr.addEventListener("load", () => {
           if (xhr.status >= 200 && xhr.status < 300) {
-      console.log("✅ Upload successful!");
-      console.log("📽️ Video URL:", publicUrl);
+            console.log("✅ Upload successful!");
+            console.log("📽️ Video URL:", publicUrl);
             resolve(publicUrl);
-    } else {
-      console.error("❌ Upload failed");
+          } else {
+            console.error("❌ Upload failed");
             reject(new Error("Upload failed"));
           }
         });
-        
+
         xhr.addEventListener("error", () => {
           console.error("❌ Upload failed");
           reject(new Error("Upload failed"));
         });
-        
+
         xhr.addEventListener("abort", () => {
           console.log("Upload aborted");
           reject(new Error("Upload aborted"));
         });
-        
+
         xhr.open("PUT", uploadUrl);
         xhr.setRequestHeader("Content-Type", file.type);
         xhr.send(file);
@@ -471,7 +471,7 @@ export default function VideoSubmissionForm() {
               <h3 className="text-2xl font-bold text-white">Video Submission Form</h3>
               <div className="h-1 w-20 bg-[#712f8e] mt-2 rounded-full"></div>
             </div>
-            
+
             {/* Video Title and Description fields */}
             <div>
               <label className="text-white font-medium">Video Title *</label>
@@ -499,7 +499,7 @@ export default function VideoSubmissionForm() {
                 />
               </div>
             </div>
-            
+
             {/* Video upload area with improved styling */}
             <motion.div
               whileHover={{ scale: 1.01 }}
@@ -523,7 +523,7 @@ export default function VideoSubmissionForm() {
                     setUploadProgress(0);
                     setVideoFiles([file]);
                     setUploadSuccess(null);
-                    
+
                     try {
                       const uploadedVideoUrl = await uploadVideo(file);
                       if (uploadedVideoUrl) {
@@ -549,7 +549,7 @@ export default function VideoSubmissionForm() {
               <div className="w-full mt-4">
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-white text-sm">Uploading video...</span>
-                  <button 
+                  <button
                     onClick={() => {
                       setUploading(false);
                       setVideoFiles([]);
@@ -575,9 +575,8 @@ export default function VideoSubmissionForm() {
             {/* Upload status messages */}
             {uploadSuccess !== null && !uploading && (
               <div
-                className={`text-sm font-medium flex items-center mt-2 ${
-                  uploadSuccess ? "text-green-500" : "text-red-500"
-                }`}
+                className={`text-sm font-medium flex items-center mt-2 ${uploadSuccess ? "text-green-500" : "text-red-500"
+                  }`}
               >
                 <span className={`mr-2 ${uploadSuccess ? "text-green-500" : "text-red-500"}`}>
                   {uploadSuccess ? "✓" : "✗"}
@@ -626,7 +625,7 @@ export default function VideoSubmissionForm() {
                 />
               </div>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="text-white font-medium">Social Handle</label>
@@ -669,7 +668,7 @@ export default function VideoSubmissionForm() {
                 className="w-full mt-2 p-3 bg-black/60 text-white rounded-lg border border-gray-800 outline-none focus:border-[#712f8e] transition-colors"
               />
             </div>
-            
+
             {/* Radio button groups with improved styling */}
             <div className="space-y-5 text-white">
               <div>
@@ -727,7 +726,7 @@ export default function VideoSubmissionForm() {
                   )}
                 </div>
               </div>
-              
+
               {/* Checkboxes with improved styling */}
               <div className="space-y-3 mt-6">
                 <label className="flex items-center space-x-3 bg-black/60 p-3 rounded-lg hover:bg-[#712f8e]/10 transition-colors cursor-pointer border border-gray-800">
@@ -766,27 +765,29 @@ export default function VideoSubmissionForm() {
                 </label>
               </div>
             </div>
-            
+
             {/* Signature Section with improved styling */}
             <div>
               <label className="text-white font-medium mb-2 block">Signature *</label>
-              <div className="mt-2 bg-white rounded-lg p-3 border border-gray-300">
+              <div className="mt-2 bg-white rounded-lg p-3 border border-gray-300 flex justify-center">
                 <SignatureCanvas
                   ref={signRef}
                   penColor="black"
                   canvasProps={{
                     width: 800,
                     height: 300,
-                    className: "rounded-lg sigCanvas mx-auto",
+                    className: "rounded-lg sigCanvas",
                     style: {
                       width: '100%',
+                      maxWidth: '100%', // allows responsiveness
                       height: '300px',
-                      maxWidth: '800px',
-                      margin: '0 auto'
+                      maxHeight: '300px',
+                      display: 'block',
                     }
                   }}
                 />
               </div>
+
               <button
                 type="button"
                 className="mt-3 px-4 py-2 bg-black text-white rounded-lg border border-gray-700 hover:bg-gray-900 transition-colors"

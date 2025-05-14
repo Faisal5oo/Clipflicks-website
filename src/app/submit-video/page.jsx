@@ -285,20 +285,20 @@ export default function VideoSubmissionForm() {
     try {
       setUploading(true);
       setUploadProgress(0);
-      
+
       const res = await fetch("https://clipflicks-admin-fe.vercel.app/api/upload-url");
       const { uploadUrl, publicUrl } = await res.json();
-  
+
       return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
-        
+
         xhr.upload.addEventListener("progress", (event) => {
           if (event.lengthComputable) {
             const percentCompleted = Math.round((event.loaded * 100) / event.total);
             setUploadProgress(percentCompleted);
           }
         });
-        
+
         xhr.addEventListener("load", () => {
           if (xhr.status >= 200 && xhr.status < 300) {
             console.log("✅ Upload successful!");
@@ -309,17 +309,17 @@ export default function VideoSubmissionForm() {
             reject(new Error("Upload failed"));
           }
         });
-        
+
         xhr.addEventListener("error", () => {
           console.error("❌ Upload failed");
           reject(new Error("Upload failed"));
         });
-        
+
         xhr.addEventListener("abort", () => {
           console.log("Upload aborted");
           reject(new Error("Upload aborted"));
         });
-        
+
         xhr.open("PUT", uploadUrl);
         xhr.setRequestHeader("Content-Type", file.type);
         xhr.send(file);
@@ -329,7 +329,7 @@ export default function VideoSubmissionForm() {
       return null;
     }
   }
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -467,14 +467,14 @@ export default function VideoSubmissionForm() {
         >
           {/* Premium gradient accent */}
           <div className="absolute top-0 right-0 w-full h-1 bg-gradient-to-r from-[#712f8e] to-[#d601db] rounded-t-2xl"></div>
-          
+
           <form className="space-y-6" onSubmit={handleSubmit}>
             {/* Form header */}
             <div className="mb-8">
               <h3 className="text-2xl font-bold text-white">Video Submission Form</h3>
               <p className="text-gray-400 mt-2">Fill out the details below to submit your video</p>
             </div>
-            
+
             {/* Video Title and Description fields */}
             <div>
               <label className="text-white font-medium">Video Title *</label>
@@ -540,7 +540,7 @@ export default function VideoSubmissionForm() {
                     setUploadProgress(0);
                     setVideoFiles([file]);
                     setUploadSuccess(null);
-                    
+
                     try {
                       const uploadedVideoUrl = await uploadVideo(file);
                       if (uploadedVideoUrl) {
@@ -574,7 +574,7 @@ export default function VideoSubmissionForm() {
                     </motion.span>
                     Uploading video...
                   </span>
-                  <button 
+                  <button
                     onClick={() => {
                       setUploading(false);
                       setVideoFiles([]);
@@ -603,9 +603,8 @@ export default function VideoSubmissionForm() {
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className={`text-sm font-medium flex items-center mt-2 p-3 rounded-lg ${
-                  uploadSuccess ? "text-green-500 bg-green-500/10 border border-green-500/20" : "text-red-500 bg-red-500/10 border border-red-500/20"
-                }`}
+                className={`text-sm font-medium flex items-center mt-2 p-3 rounded-lg ${uploadSuccess ? "text-green-500 bg-green-500/10 border border-green-500/20" : "text-red-500 bg-red-500/10 border border-red-500/20"
+                  }`}
               >
                 <span className={`mr-2 ${uploadSuccess ? "text-green-500" : "text-red-500"}`}>
                   {uploadSuccess ? "✓" : "✗"}
@@ -617,7 +616,7 @@ export default function VideoSubmissionForm() {
             )}
 
             {videoFiles.length > 0 && !uploading && (
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="bg-gray-900/40 p-3 rounded-lg border border-gray-800 mt-3"
@@ -634,7 +633,7 @@ export default function VideoSubmissionForm() {
 
             {/* Name Fields - Enhanced with animations */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <motion.div 
+              <motion.div
                 whileHover={{ y: -2 }}
                 transition={{ type: "spring", stiffness: 500, damping: 15 }}
               >
@@ -650,7 +649,7 @@ export default function VideoSubmissionForm() {
                   className="w-full mt-2 p-3 bg-gray-900/60 text-white rounded-lg border border-gray-800 outline-none focus:border-[#712f8e] transition-colors"
                 />
               </motion.div>
-              <motion.div 
+              <motion.div
                 whileHover={{ y: -2 }}
                 transition={{ type: "spring", stiffness: 500, damping: 15 }}
               >
@@ -666,7 +665,7 @@ export default function VideoSubmissionForm() {
               </motion.div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <motion.div 
+              <motion.div
                 whileHover={{ y: -2 }}
                 transition={{ type: "spring", stiffness: 500, damping: 15 }}
               >
@@ -681,7 +680,7 @@ export default function VideoSubmissionForm() {
                   className="w-full mt-2 p-3 bg-gray-900/60 text-white rounded-lg border border-gray-800 outline-none focus:border-[#712f8e] transition-colors"
                 />
               </motion.div>
-              <motion.div 
+              <motion.div
                 whileHover={{ y: -2 }}
                 transition={{ type: "spring", stiffness: 500, damping: 15 }}
               >
@@ -704,7 +703,7 @@ export default function VideoSubmissionForm() {
               </motion.div>
             </div>
             {/* Email with animation */}
-            <motion.div 
+            <motion.div
               whileHover={{ y: -2 }}
               transition={{ type: "spring", stiffness: 500, damping: 15 }}
             >
@@ -718,7 +717,7 @@ export default function VideoSubmissionForm() {
                 className="w-full mt-2 p-3 bg-gray-900/60 text-white rounded-lg border border-gray-800 outline-none focus:border-[#712f8e] transition-colors"
               />
             </motion.div>
-            
+
             {/* Enhanced checkbox section */}
             <div className="space-y-5 text-white">
               <div>
@@ -727,8 +726,8 @@ export default function VideoSubmissionForm() {
                 </label>
                 <div className="grid grid-cols-2 gap-3">
                   {["Me", "Friend", "Family", "Other"].map((option) => (
-                    <motion.label 
-                      key={option} 
+                    <motion.label
+                      key={option}
                       className={`flex items-center space-x-3 p-3 rounded-lg hover:bg-[#712f8e]/10 transition-all cursor-pointer border ${recordedBy === option ? "border-[#d601db] bg-[#712f8e]/10" : "border-gray-800 bg-black/60"}`}
                       whileHover={{ y: -2 }}
                       whileTap={{ scale: 0.98 }}
@@ -754,8 +753,8 @@ export default function VideoSubmissionForm() {
                 </label>
                 <div className="space-y-3">
                   {["Yes", "No"].map((option) => (
-                    <motion.label 
-                      key={option} 
+                    <motion.label
+                      key={option}
                       className={`flex items-center space-x-3 p-3 rounded-lg hover:bg-[#712f8e]/10 transition-all cursor-pointer border ${submittedElsewhere === option ? "border-[#d601db] bg-[#712f8e]/10" : "border-gray-800 bg-black/60"}`}
                       whileHover={{ y: -2 }}
                       whileTap={{ scale: 0.98 }}
@@ -792,9 +791,9 @@ export default function VideoSubmissionForm() {
                   )}
                 </div>
               </div>
-              
+
               {/* Enhanced agreement checkboxes */}
-              <motion.label 
+              <motion.label
                 className={`flex items-center space-x-3 p-3 rounded-lg hover:bg-[#712f8e]/10 transition-all cursor-pointer border ${agreed18 ? "border-[#d601db] bg-[#712f8e]/10" : "border-gray-800 bg-black/60"}`}
                 whileHover={{ y: -2 }}
                 whileTap={{ scale: 0.98 }}
@@ -808,7 +807,7 @@ export default function VideoSubmissionForm() {
                 <span>I verify that I am at least 18 years old *</span>
               </motion.label>
 
-              <motion.label 
+              <motion.label
                 className={`flex items-center space-x-3 p-3 rounded-lg hover:bg-[#712f8e]/10 transition-all cursor-pointer border ${agreedTerms ? "border-[#d601db] bg-[#712f8e]/10" : "border-gray-800 bg-black/60"}`}
                 whileHover={{ y: -2 }}
                 whileTap={{ scale: 0.98 }}
@@ -825,7 +824,7 @@ export default function VideoSubmissionForm() {
                 </span>
               </motion.label>
 
-              <motion.label 
+              <motion.label
                 className={`flex items-center space-x-3 p-3 rounded-lg hover:bg-[#712f8e]/10 transition-all cursor-pointer border ${exclusiveRights ? "border-[#d601db] bg-[#712f8e]/10" : "border-gray-800 bg-black/60"}`}
                 whileHover={{ y: -2 }}
                 whileTap={{ scale: 0.98 }}
@@ -841,27 +840,29 @@ export default function VideoSubmissionForm() {
                 </span>
               </motion.label>
             </div>
-            
+
             {/* Signature Section with improved styling */}
             <div>
               <label className="text-white font-medium mb-2 block">Signature *</label>
-              <div className="mt-2 bg-white rounded-lg p-3 border border-gray-300">
+              <div className="mt-2 bg-white rounded-lg p-3 border border-gray-300 flex justify-center">
                 <SignatureCanvas
                   ref={signRef}
                   penColor="black"
                   canvasProps={{
                     width: 800,
                     height: 300,
-                    className: "rounded-lg sigCanvas mx-auto",
+                    className: "rounded-lg sigCanvas",
                     style: {
                       width: '100%',
+                      maxWidth: '100%', // allows responsiveness
                       height: '300px',
-                      maxWidth: '800px',
-                      margin: '0 auto'
+                      maxHeight: '300px',
+                      display: 'block',
                     }
                   }}
                 />
               </div>
+
               <button
                 type="button"
                 className="mt-3 px-4 py-2 bg-black text-white rounded-lg border border-gray-700 hover:bg-gray-900 transition-colors"
