@@ -871,6 +871,7 @@ export default function VideoSubmissionForm() {
               </button>
             </div>
 
+
             {/* Enhanced submit button */}
             <motion.button
               type="submit"
