@@ -875,10 +875,14 @@ export default function VideoSubmissionForm() {
             {/* Enhanced submit button */}
             <motion.button
               type="submit"
-              whileHover={{ scale: 1.02, boxShadow: "0 10px 25px -5px rgba(113, 47, 142, 0.4)" }}
-              whileTap={{ scale: 0.98 }}
-              disabled={loading}
-              className="w-full py-4 mt-8 bg-gradient-to-r from-[#712f8e] to-[#d601db] text-white font-semibold rounded-lg transition-all shadow-lg shadow-[#712f8e]/20"
+              whileHover={{ scale: rawVideo ? 1.02 : 1, boxShadow: rawVideo ? "0 10px 25px -5px rgba(113, 47, 142, 0.4)" : "none" }}
+              whileTap={{ scale: rawVideo ? 0.98 : 1 }}
+              disabled={loading || !rawVideo}
+              className={`w-full py-4 mt-8 text-white font-semibold rounded-lg transition-all shadow-lg ${
+                rawVideo 
+                  ? "bg-gradient-to-r from-[#712f8e] to-[#d601db] shadow-[#712f8e]/20" 
+                  : "bg-gray-600 cursor-not-allowed"
+              }`}
             >
               {loading ? (
                 <div className="flex items-center justify-center">
@@ -888,6 +892,8 @@ export default function VideoSubmissionForm() {
                   </svg>
                   Submitting...
                 </div>
+              ) : !rawVideo ? (
+                "Please Upload a Video First"
               ) : (
                 "Submit Your Video"
               )}
